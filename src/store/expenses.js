@@ -5,6 +5,7 @@ const slice = createSlice({
   name: 'expenses',
   initialState: {
     list: [],
+    budget: 0,
     loading: false,
     lastFetch: null
   },
@@ -16,16 +17,17 @@ const slice = createSlice({
 });
 
 const {
-  tabChanged
+  expenseAdded
 } = slice.actions;
 export default slice.reducer;
 
 // COMMANDS
-// export const changeTab = currentTab => tabChanged({ currentTab });
+export const addExpense = expense =>
+  expenseAdded({ ...expense });
 
 // SELECTORS
-// export const getCurrentTab =
-//   createSelector(
-//     state => state.entities,
-//     entities => entities.interface.currentTab
-//   )
+export const loadExpenses =
+  createSelector(
+    state => state.entities.expenses,
+    expenses => expenses.list
+  )

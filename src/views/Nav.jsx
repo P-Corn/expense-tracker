@@ -8,8 +8,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
+import { useDispatch } from 'react-redux';
+import { openModal } from '../store/interface';
 
 export default function Nav() {
+  const dispatch = useDispatch();
+
   return (
     <Box 
       sx={{ flexGrow: 1 }}
@@ -28,7 +32,7 @@ export default function Nav() {
           <Typography variant="h6" component="div">
             Expense Tracker
           </Typography>
-          <Button endIcon={<Add/>} color="inherit">Add Expense</Button>
+          <Button endIcon={<Add/>} color="inherit" onClick={() => dispatch(openModal())}>Add Expense</Button>
         </Toolbar>
       </AppBar>
     </Box>
