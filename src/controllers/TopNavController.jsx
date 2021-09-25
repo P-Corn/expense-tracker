@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -7,7 +7,7 @@ import { changeTab } from '../store/interface';
 
 export default function TopNavController() {
   const dispatch = useDispatch();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     const tabId = event.target.id;

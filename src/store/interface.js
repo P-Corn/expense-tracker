@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 const slice = createSlice({
   name: 'interface',
   initialState: {
-    currentTab: 2,
+    currentTab: 0,
     openModal: false
   },
   reducers: {

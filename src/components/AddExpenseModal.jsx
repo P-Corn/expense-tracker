@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import { useSelector } from 'react-redux';
+import { Modal, TextField, Box, Button } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import { closeModal } from '../store/interface';
+import { flexbox } from '@mui/system';
 
 const style = {
   position: 'absolute',
@@ -16,11 +16,15 @@ const style = {
   p: 4,
 };
 
-const Form = () => (
+const btnGroup = {
+  width: '100%'
+}
+
+const Form = ({ dispatch }) => (
   <Box
     component="form"
     sx={{
-      '& > :not(style)': { m: 1, width: '25ch' },
+      '& > :not(style)': { m: 1, width: '100%' },
     }}
     noValidate
     autoComplete="off"
@@ -30,11 +34,17 @@ const Form = () => (
     <TextField id="standard-basic" label="Description" variant="standard" />
     <TextField id="standard-basic" label="Category" variant="standard" />
     <TextField id="standard-basic" label="Date" variant="standard" />
+    <Box className={btnGroup} sx={{ display: 'flex', justifyContent: 'end' }}>
+      <Button onClick={() => dispatch(closeModal())}>Cancel</Button>
+      <Button variant="contained">Submit</Button>
+    </Box>
   </Box>
 )
 
 export default function AddExpenseModal() {
   const open = useSelector(state => state.entities.interface.openModal);
+
+  const dispatch = useDispatch();
 
   console.log(open)
 
@@ -46,7 +56,7 @@ export default function AddExpenseModal() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Form />
+          <Form dispatch={dispatch} />
         </Box>
       </Modal>
     </div>
