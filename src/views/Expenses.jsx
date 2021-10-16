@@ -3,21 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 function Expenses() {
-  const [expenseList, setExpenseList] = useState({});
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(organizeExpenses());
-    setExpenseList(useSelector(loadExpenses))
-  },[])
+    dispatch(loadExpenses);
+  }, []);
 
   return (
     <div>
       <ul>
-        {Object.keys(expenseList).map((key, index) => (
+        {/* {Object.keys(expenseList).map((key, index) => (
           <li>{expenseList[key]}</li>
-        ))}
+        ))} */}
       </ul>
     </div>
   );

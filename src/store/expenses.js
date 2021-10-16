@@ -59,12 +59,17 @@ const {
 export default slice.reducer;
 
 // COMMANDS
+export const loadExpenses = () =>
+  (dispatch, getState) => {
+    
+  }
+
 export const addExpense = expense => expenseAdded({ ...expense });
 
 export const organizeExpenses = expenseList => expensesOrganized(expenseList);
 
 // SELECTORS
-export const loadExpenses =
+export const getExpenses =
   createSelector(
     state => state.entities.expenses,
     expenses => expenses.organizedList
