@@ -1,41 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
+import { apiCallBegan } from './api';
 
 const slice = createSlice({
   name: 'expenses',
   initialState: {
-    list: [
-      {
-        amount: 52,
-        title: 'title1',
-        description: 'description1',
-        category: 'cat1',
-        date: '1/1/1111'
-      },
-      {
-        amount: 53,
-        title: 'title2',
-        description: 'description1',
-        category: 'cat1',
-        date: '1/1/1111'
-      },
-      {
-        amount: 54,
-        title: 'title3',
-        description: 'description1',
-        category: 'cat1',
-        date: '2/2/2222'
-      }
-    ],
+    list: [],
     organizedList: {},
     budget: 0,
     loading: false,
     lastFetch: null
   },
   reducers: {
+    expensesRequested: (expenses) => {
+      expenses.loading = true;
+    },
+
+    expensesRequestFailed: (expenses) => {
+      expenses.loading = false;
+    },
+
     expenseAdded: (expenses, action) => {
       expenses.list.push(action.payload);
     },
+
+    expensesReceived: (expenses, action) => {
+      expenses.list = action.payload;
+    },
+
     expensesOrganized: (expenses, action) => {
       const organizedList = action.payload.reduce((newObj, expense) => {
         const date = expense.date;
@@ -46,27 +38,43 @@ const slice = createSlice({
           newObj[date].push(expense)
         }
         return newObj;
-      }, {})
-      expenses.organizedList = {...organizedList}
+      }, {});
+      expenses.organizedList = {...organizedList};
+      expenses.loading = false;
     }
   }
 });
 
 const {
   expenseAdded,
-  expensesOrganized 
+  expensesRequested,
+  expensesRequestFailed,
+  expensesReceived
 } = slice.actions;
 export default slice.reducer;
 
 // COMMANDS
+const url = '/expenses';
+
 export const loadExpenses = () =>
   (dispatch, getState) => {
-    
-  }
+    dispatch(
+      apiCallBegan({
+        url,
+        onStart: expensesRequested.type,
+        onSuccess: expensesReceived.type,
+        onError: expensesRequestFailed.type
+      })
+    )
+  };
 
-export const addExpense = expense => expenseAdded({ ...expense });
-
-export const organizeExpenses = expenseList => expensesOrganized(expenseList);
+export const addExpense = expense => 
+  apiCallBegan({
+    url,
+    method: 'post',
+    data: expense,
+    onSuccess: expenseAdded.type
+  })
 
 // SELECTORS
 export const getExpenses =
