@@ -80,5 +80,5 @@ export const addExpense = expense =>
 export const getExpenses =
   createSelector(
     state => state.entities.expenses,
-    expenses => expenses.organizedList
+    expenses => expenses.list
   )
