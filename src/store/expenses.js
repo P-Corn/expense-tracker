@@ -24,6 +24,11 @@ const slice = createSlice({
       expenses.list.push(action.payload);
     },
 
+    expenseDeleted: (expenses, action) => {
+      const expenseToDelete = expenses.find(expense => expense._id === action.payload._id);
+      console.log(expenseToDelete);
+    },
+
     expensesReceived: (expenses, action) => {
       expenses.list = action.payload;
     },
@@ -49,7 +54,8 @@ const {
   expenseAdded,
   expensesRequested,
   expensesRequestFailed,
-  expensesReceived
+  expensesReceived,
+  expenseDeleted
 } = slice.actions;
 export default slice.reducer;
 
@@ -74,6 +80,14 @@ export const addExpense = expense =>
     method: 'post',
     data: expense,
     onSuccess: expenseAdded.type
+  })
+
+export const deleteExpense = expense =>
+  apiCallBegan({
+    url,
+    method: 'delete',
+    data: expense,
+    onScucess: expenseDeleted.type
   })
 
 // SELECTORS

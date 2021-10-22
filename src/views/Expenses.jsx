@@ -1,21 +1,20 @@
-import {addExpense, loadExpenses, getExpenses } from '../store/expenses';
+import {addExpense, getExpenses, deleteExpense } from '../store/expenses';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import * as actions from '../store/api';
 
 function Expenses() {
   const dispatch = useDispatch();
   const expenses = useSelector(getExpenses);
 
-  useEffect(() => {
-    dispatch(loadExpenses());
-  }, [])
+  const handleDelete = (id) => dispatch(deleteExpense(id));
 
   return (
     <div>
       <ul>
         {expenses.map(expense => (
-          <li>{expense.title}</li>
+          <>
+            <li>{expense.title}</li>
+            <button onClick={() => handleDelete(expense._id)}>Delete</button>
+          </>
         ))}
       </ul>
     </div>
