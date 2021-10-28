@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Summary from './views/Summary';
 import Expenses from './views/Expenses';
 import Settings from './views/Settings';
-import { loadExpenses } from './store/expenses';
+import LoadData from './controllers/LoadData';
 
 const store = configureStore();
 
@@ -18,7 +18,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div className="App">
+        <LoadData>
           <Nav />
           <AddExpenseModal />
           <Switch>
@@ -33,7 +33,7 @@ function App() {
             </Route>
           </Switch>
           <BottomNav />
-        </div>
+        </LoadData>
       </Router>
     </Provider>
   );

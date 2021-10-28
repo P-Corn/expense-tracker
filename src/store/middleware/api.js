@@ -15,7 +15,7 @@ const api = ({ dispatch }) => next => async action => {
       baseURL: `http://localhost:3001`,
       url,
       method,
-      data
+      data: method === 'delete' ? { id: data } : { ...data }
     });
     // General
     dispatch(actions.apiCallSuccess(response.data));

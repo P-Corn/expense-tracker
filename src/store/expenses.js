@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { apiCallBegan } from './api';
+import dayjs from 'dayjs';
 
 const slice = createSlice({
   name: 'expenses',
@@ -25,8 +26,7 @@ const slice = createSlice({
     },
 
     expenseDeleted: (expenses, action) => {
-      const expenseToDelete = expenses.find(expense => expense._id === action.payload._id);
-      console.log(expenseToDelete);
+      expenses.list = expenses.list.filter(expense => expense._id !== action.payload._id)
     },
 
     expensesReceived: (expenses, action) => {
@@ -40,7 +40,7 @@ const slice = createSlice({
           newObj[date].push(expense);
         else {
           newObj[date] = [];
-          newObj[date].push(expense)
+          newObj[date].push(expense);
         }
         return newObj;
       }, {});
@@ -87,7 +87,7 @@ export const deleteExpense = expense =>
     url,
     method: 'delete',
     data: expense,
-    onScucess: expenseDeleted.type
+    onSuccess: expenseDeleted.type
   })
 
 // SELECTORS
@@ -96,3 +96,19 @@ export const getExpenses =
     state => state.entities.expenses,
     expenses => expenses.list
   )
+
+  export const getOrganizedExpenses =
+  createSelector(
+    state => state.entities.expenses,
+    expenses => expenses.list.reduce((newObj, expense) => {
+      const date = expense.date;
+      const formattedDate = dayjs(date).format('MMMM DD YYYY');
+      if(date in newObj)
+        newObj[formattedDate].push({ ...expense, date: formattedDate });
+      else {
+        newObj[formattedDate] = [];
+        newObj[formattedDate].push({ ...expense, date: formattedDate });
+      }
+      return newObj;
+    }, {})
+  ) 
