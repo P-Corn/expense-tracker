@@ -10,6 +10,7 @@ import Summary from './views/Summary';
 import Expenses from './views/Expenses';
 import Settings from './views/Settings';
 import LoadData from './controllers/LoadData';
+import { Box } from '@mui/material';
 
 const store = configureStore();
 
@@ -32,8 +33,8 @@ function App() {
               <Settings />
             </Route>
           </Switch>
-          <BottomNav />
         </LoadData>
+        <BottomNav />
       </Router>
     </Provider>
   );

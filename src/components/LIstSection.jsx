@@ -1,27 +1,38 @@
+/* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
+/** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
+import Button from '@mui/material/Button';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import Card from '@mui/material/Card';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { css } from '@emotion/react';
+import { deleteExpense } from '../store/expenses';
 
 export default function ListSection({ date, listOfExpenses }) {
   const [open, setOpen] = useState(true);
-  const handleClick = () => {
-    setOpen(!open);
-  };
+  const [openExpense, setOpenExpense] = useState('');
+  const dispatch = useDispatch();
 
-  console.log(listOfExpenses)
+  const handleClick = (id) => {
+    if (openExpense == id)
+      setOpenExpense('');
+    else
+      setOpenExpense(id);
+  }
+
+  const handleDelete = (id) => {
+    dispatch(deleteExpense(id));
+  }
 
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: '100%', maxWidth: 800, bgcolor: 'background.paper' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
@@ -32,18 +43,26 @@ export default function ListSection({ date, listOfExpenses }) {
     >
       { listOfExpenses.map(expense => (
         <>
-          <ListItemButton onClick={handleClick}>
+          <ListItemButton onClick={() => handleClick(expense._id)}>
             <ListItemText primary={`$${expense.amount}`} secondary={expense.category}/>
-            {open ? <ExpandLess /> : <ExpandMore />}
+            {openExpense == expense._id ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+          <Collapse in={openExpense == expense._id} timeout="auto" unmountOnExit>
+            <List css={css`
+              padding-left: 16px;
+              box-shadow: inset 0 0 8px rgba(0,0,0,.3);
+            `} component="div">
+              <Button onClick={() => handleDelete(expense._id)}>Delete</Button>
+              <Button>Edit</Button>
               <ListItemText primary={`Amount: ${expense.amount}`}/>
               <ListItemText primary={`Title: ${expense.title}`}/>
               <ListItemText primary={`Description: ${expense.description}`}/>
               <ListItemText primary={`Category: ${expense.category}`}/>
               <ListItemText primary={`Date: ${expense.date}`}/>
             </List>
+            <Card>
+
+            </Card>
           </Collapse>
         </>
       )) }

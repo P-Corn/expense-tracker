@@ -103,9 +103,10 @@ export const getExpenses =
     expenses => expenses.list.reduce((newObj, expense) => {
       const date = expense.date;
       const formattedDate = dayjs(date).format('MMMM DD YYYY');
-      if(date in newObj)
+      if(formattedDate in newObj) {
+        console.log('made it')
         newObj[formattedDate].push({ ...expense, date: formattedDate });
-      else {
+      } else {
         newObj[formattedDate] = [];
         newObj[formattedDate].push({ ...expense, date: formattedDate });
       }

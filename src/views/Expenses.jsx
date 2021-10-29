@@ -1,7 +1,9 @@
+import { css } from '@emotion/react';
 import { useEffect } from 'react';
 import { addExpense, getOrganizedExpenses, deleteExpense } from '../store/expenses';
 import { useDispatch, useSelector } from 'react-redux';
-import ListSection from '../components/LIstSection';
+import ListSection from '../components/ListSection';
+import { Box } from '@mui/material';
 
 function Expenses() {
   const dispatch = useDispatch();
@@ -9,14 +11,18 @@ function Expenses() {
 
   const handleDelete = id => dispatch(deleteExpense(id));
 
+  useEffect(() => {
+    console.log(expenses)
+  }, [])
+
   return (
-    <div>
-      {Object.keys(expenses).map((key, index) => (
-        <>
-        <ListSection date={key} listOfExpenses={expenses[key]}/>
-        </>
-      ))}
-    </div>
+    <Box>
+      <Box>
+        {Object.keys(expenses).map((key, index) => (
+          <ListSection date={key} listOfExpenses={expenses[key]}/>
+        ))}
+      </Box>
+    </Box>
   )
 }
 
