@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { apiCallBegan } from './api';
 import dayjs from 'dayjs';
+import { openModal } from './interface';
 
 const slice = createSlice({
   name: 'expenses',
@@ -10,7 +11,8 @@ const slice = createSlice({
     organizedList: {},
     budget: 0,
     loading: false,
-    lastFetch: null
+    lastFetch: null,
+    expenseToEdit: {},
   },
   reducers: {
     expensesRequested: (expenses) => {
@@ -31,6 +33,14 @@ const slice = createSlice({
 
     expensesReceived: (expenses, action) => {
       expenses.list = action.payload;
+    },
+
+    expenseEdited: (expenses, action) => {
+      expenses.expenseToEdit = action.payload;
+    },
+
+    expenseUpdated: (expenses, action) => {
+      console.log(action.payload)
     },
 
     expensesOrganized: (expenses, action) => {
@@ -55,7 +65,9 @@ const {
   expensesRequested,
   expensesRequestFailed,
   expensesReceived,
-  expenseDeleted
+  expenseDeleted,
+  expenseEdited,
+  expenseUpdated
 } = slice.actions;
 export default slice.reducer;
 
@@ -90,6 +102,20 @@ export const deleteExpense = expense =>
     onSuccess: expenseDeleted.type
   })
 
+export const updateExpense = expense =>
+  apiCallBegan({
+    url,
+    method: 'put',
+    data: expense,
+    onSuccess: expenseUpdated.type
+  })
+
+export const editExpense = expense =>
+  (dispatch, getState) => {
+    dispatch(expenseEdited(expense));
+    dispatch(openModal());
+  }
+
 // SELECTORS
 export const getExpenses =
   createSelector(
@@ -97,14 +123,20 @@ export const getExpenses =
     expenses => expenses.list
   )
 
-  export const getOrganizedExpenses =
+
+export const getExpenseToEdit =
+  createSelector(
+    state => state.entities.expenses,
+    expenses => expenses.expenseToEdit
+  )
+
+export const getOrganizedExpenses =
   createSelector(
     state => state.entities.expenses,
     expenses => expenses.list.reduce((newObj, expense) => {
       const date = expense.date;
       const formattedDate = dayjs(date).format('MMMM DD YYYY');
       if(formattedDate in newObj) {
-        console.log('made it')
         newObj[formattedDate].push({ ...expense, date: formattedDate });
       } else {
         newObj[formattedDate] = [];

@@ -12,23 +12,24 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
-import { deleteExpense } from '../store/expenses';
+import { deleteExpense, editExpense } from '../store/expenses';
 
 export default function ListSection({ date, listOfExpenses }) {
   const [open, setOpen] = useState(true);
   const [openExpense, setOpenExpense] = useState('');
   const dispatch = useDispatch();
 
-  const handleClick = (id) => {
+  const handleOpenExpense = (id) => {
     if (openExpense == id)
       setOpenExpense('');
     else
       setOpenExpense(id);
   }
 
-  const handleDelete = (id) => {
-    dispatch(deleteExpense(id));
-  }
+  const handleDelete = (id) => dispatch(deleteExpense(id));
+
+  const handleEdit = (expense) => dispatch(editExpense(expense));
+
 
   return (
     <List
@@ -42,8 +43,8 @@ export default function ListSection({ date, listOfExpenses }) {
       }
     >
       { listOfExpenses.map(expense => (
-        <>
-          <ListItemButton onClick={() => handleClick(expense._id)}>
+        <div key={expense._id}>
+          <ListItemButton onClick={() => handleOpenExpense(expense._id)}>
             <ListItemText primary={`$${expense.amount}`} secondary={expense.category}/>
             {openExpense == expense._id ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
@@ -53,18 +54,15 @@ export default function ListSection({ date, listOfExpenses }) {
               box-shadow: inset 0 0 8px rgba(0,0,0,.3);
             `} component="div">
               <Button onClick={() => handleDelete(expense._id)}>Delete</Button>
-              <Button>Edit</Button>
+              <Button onClick={() => handleEdit(expense)}>Edit</Button>
               <ListItemText primary={`Amount: ${expense.amount}`}/>
               <ListItemText primary={`Title: ${expense.title}`}/>
               <ListItemText primary={`Description: ${expense.description}`}/>
               <ListItemText primary={`Category: ${expense.category}`}/>
               <ListItemText primary={`Date: ${expense.date}`}/>
             </List>
-            <Card>
-
-            </Card>
           </Collapse>
-        </>
+        </div>
       )) }
     </List>
   );

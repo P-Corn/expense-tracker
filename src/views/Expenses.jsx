@@ -19,7 +19,7 @@ function Expenses() {
     <Box>
       <Box>
         {Object.keys(expenses).map((key, index) => (
-          <ListSection date={key} listOfExpenses={expenses[key]}/>
+          <ListSection date={key} key={key} listOfExpenses={expenses[key]}/>
         ))}
       </Box>
     </Box>

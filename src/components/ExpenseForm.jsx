@@ -1,8 +1,8 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import { Modal, TextField, Box, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeModal } from '../store/interface';
-import { addExpense } from '../store/expenses';
+import { addExpense, getExpenseToEdit } from '../store/expenses';
 
 const style = {
   position: 'absolute',
@@ -27,7 +27,24 @@ const Form = () => {
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
 
+  const [editingExpense, setEditingExpense] = useState(false);
+
   const dispatch = useDispatch();
+  const expenseToEdit = useSelector(getExpenseToEdit);
+
+  useEffect(() => {
+    if (expenseToEdit === {}) {
+      setEditingExpense(false);
+    } else {
+      setEditingExpense(true);
+      setAmount(expenseToEdit.amount);
+      setTitle(expenseToEdit.title);
+      setDescription(expenseToEdit.description);
+      setCategory(expenseToEdit.category);
+      setDate(expenseToEdit.date);
+    }
+  }, [expenseToEdit]);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,7 +81,7 @@ const Form = () => {
   )
 }
 
-export default function AddExpenseModal() {
+export default function ExpenseForm() {
   const open = useSelector(state => state.entities.interface.openModal);
 
   return (
