@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import Nav from './views/Nav';
 import configureStore from './store/configureStore';
-import ExpenseForm from './components/ExpenseForm';
+import AddExpenseForm from './components/AddExpenseForm';
+import UpdateExpenseForm from './components/UpdateExpenseForm';
 import BottomNav from './views/BottomNav';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Summary from './views/Summary';
@@ -21,7 +22,8 @@ function App() {
       <Router>
         <LoadData>
           <Nav />
-          <ExpenseForm />
+          <AddExpenseForm />
+          <UpdateExpenseForm />
           <Switch>
             <Route path="/summary">
               <Summary />

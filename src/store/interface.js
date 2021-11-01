@@ -5,32 +5,43 @@ const slice = createSlice({
   name: 'interface',
   initialState: {
     currentTab: 0,
-    openModal: false
+    updateModalActive: false,
+    addModalActive: false,
   },
   reducers: {
     tabChanged: (state, action) => {
       state.currentTab = action.payload.currentTab
     },
-    modalOpened: (state) => {
-      state.openModal = true;
+    addModalOpened: (state) => {
+      state.addModalActive = true;
     },
-    modalClosed: (state) => {
-      state.openModal = false;
+    addModalClosed: (state) => {
+      state.addModalActive = false;
+    },
+    updateModalOpened: (state) => {
+      state.updateModalActive = true;
+    },
+    updateModalClosed: (state) => {
+      state.updateModalActive = false;
     },
   }
 });
 
 const {
   tabChanged,
-  modalOpened,
-  modalClosed
+  addModalOpened,
+  addModalClosed,
+  updateModalOpened,
+  updateModalClosed
 } = slice.actions;
 export default slice.reducer;
 
 // COMMANDS
 export const changeTab = currentTab => tabChanged({ currentTab });
-export const openModal = () => modalOpened();
-export const closeModal = () => modalClosed();
+export const openAddModal = () => addModalOpened();
+export const closeAddModal = () => addModalClosed();
+export const openUpdateModal = () => updateModalOpened();
+export const closeUpdateModal = () => updateModalClosed();
 
 // SELECTORS
 export const getCurrentTab =

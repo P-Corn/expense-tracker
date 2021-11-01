@@ -12,7 +12,7 @@ function Expenses() {
   const handleDelete = id => dispatch(deleteExpense(id));
 
   useEffect(() => {
-    console.log(expenses)
+    // console.log(expenses)
   }, [])
 
   return (

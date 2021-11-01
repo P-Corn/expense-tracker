@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { apiCallBegan } from './api';
 import dayjs from 'dayjs';
-import { openModal } from './interface';
+import { openUpdateModal } from './interface';
 
 const slice = createSlice({
   name: 'expenses',
@@ -40,7 +40,8 @@ const slice = createSlice({
     },
 
     expenseUpdated: (expenses, action) => {
-      console.log(action.payload)
+      let expenseToUpdate = expenses.list.findIndex(expense => expense._id === action.payload._id);
+      expenses.list[expenseToUpdate] = action.payload;
     },
 
     expensesOrganized: (expenses, action) => {
@@ -112,8 +113,8 @@ export const updateExpense = expense =>
 
 export const editExpense = expense =>
   (dispatch, getState) => {
+    dispatch(openUpdateModal());
     dispatch(expenseEdited(expense));
-    dispatch(openModal());
   }
 
 // SELECTORS
@@ -142,6 +143,7 @@ export const getOrganizedExpenses =
         newObj[formattedDate] = [];
         newObj[formattedDate].push({ ...expense, date: formattedDate });
       }
+      console.log(newObj)
       return newObj;
     }, {})
   ) 

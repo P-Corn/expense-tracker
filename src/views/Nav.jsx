@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import { useDispatch } from 'react-redux';
-import { openModal } from '../store/interface';
+import { openAddModal } from '../store/interface';
 
 export default function Nav() {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ export default function Nav() {
           <Typography variant="h6" component="div">
             Expense Tracker
           </Typography>
-          <Button endIcon={<Add/>} color="inherit" onClick={() => dispatch(openModal())}>Add Expense</Button>
+          <Button endIcon={<Add/>} color="inherit" onClick={() => dispatch(openAddModal())}>Add Expense</Button>
         </Toolbar>
       </AppBar>
     </Box>
