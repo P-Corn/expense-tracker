@@ -7,6 +7,7 @@ const slice = createSlice({
     currentTab: 0,
     updateModalActive: false,
     addModalActive: false,
+    sortMethod: ''
   },
   reducers: {
     tabChanged: (state, action) => {
@@ -24,6 +25,9 @@ const slice = createSlice({
     updateModalClosed: (state) => {
       state.updateModalActive = false;
     },
+    sortMethodChanged: (state) => {
+      state.sortMethod = false;
+    },
   }
 });
 
@@ -32,7 +36,8 @@ const {
   addModalOpened,
   addModalClosed,
   updateModalOpened,
-  updateModalClosed
+  updateModalClosed,
+  sortMethodChanged
 } = slice.actions;
 export default slice.reducer;
 
@@ -42,10 +47,17 @@ export const openAddModal = () => addModalOpened();
 export const closeAddModal = () => addModalClosed();
 export const openUpdateModal = () => updateModalOpened();
 export const closeUpdateModal = () => updateModalClosed();
+export const changeSortMethod = () => sortMethodChanged();
 
 // SELECTORS
 export const getCurrentTab =
   createSelector(
     state => state.entities,
     entities => entities.interface.currentTab
+  )
+
+export const getSortMethod =
+  createSelector(
+    state => state.entities,
+    entities => entities.interface.sortMethod
   )

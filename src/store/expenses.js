@@ -12,6 +12,7 @@ const slice = createSlice({
     budget: 0,
     loading: false,
     lastFetch: null,
+    dates: [],
     expenseToEdit: {},
   },
   reducers: {
@@ -33,6 +34,9 @@ const slice = createSlice({
 
     expensesReceived: (expenses, action) => {
       expenses.list = action.payload;
+      for (let expense of action.payload) {
+        expenses.dates.push(expense.data);
+      }
     },
 
     expenseEdited: (expenses, action) => {
@@ -74,6 +78,17 @@ export default slice.reducer;
 
 // COMMANDS
 const url = '/expenses';
+const dateReducer = (newObj, expense) => {
+  const date = expense.date;
+  const formattedDate = dayjs(date).format('MMM D YYYY');
+  if (formattedDate in newObj) {
+    newObj[formattedDate].push({ ...expense, date: formattedDate });
+  } else {
+    newObj[formattedDate] = [];
+    newObj[formattedDate].push({ ...expense, date: formattedDate });
+  }
+  return newObj;
+};
 
 export const loadExpenses = () =>
   (dispatch, getState) => {
@@ -124,7 +139,6 @@ export const getExpenses =
     expenses => expenses.list
   )
 
-
 export const getExpenseToEdit =
   createSelector(
     state => state.entities.expenses,
@@ -133,17 +147,6 @@ export const getExpenseToEdit =
 
 export const getOrganizedExpenses =
   createSelector(
-    state => state.entities.expenses,
-    expenses => expenses.list.reduce((newObj, expense) => {
-      const date = expense.date;
-      const formattedDate = dayjs(date).format('MMMM DD YYYY');
-      if(formattedDate in newObj) {
-        newObj[formattedDate].push({ ...expense, date: formattedDate });
-      } else {
-        newObj[formattedDate] = [];
-        newObj[formattedDate].push({ ...expense, date: formattedDate });
-      }
-      console.log(newObj)
-      return newObj;
-    }, {})
+    state => state.entities.expenses.list,
+    list => list.reduce(dateReducer, {})
   ) 

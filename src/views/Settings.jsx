@@ -1,9 +1,10 @@
 import React from 'react';
+import Categories from '../components/Categories';
 
 function Settings(props) {
   return (
     <div>
-      Settings
+      <Categories />
     </div>
   );
 }

@@ -5,8 +5,9 @@ import { closeUpdateModal } from '../store/interface';
 import { getExpenseToEdit, updateExpense } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import AdapterDate from '@mui/lab/AdapterDayjs';
 import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
 
 const style = {
   position: 'absolute',
@@ -25,39 +26,26 @@ const btnGroup = {
 }
 
 const Form = () => {
-  const [id, setId] = useState("");
-  const [amount, setAmount] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [date, setDate] = useState("");
-  const [value, setValue] = useState("");
-
-  useEffect(() => console.log(value), [value])
-
+  const { _id, amount, title, description, category, date } = useSelector(getExpenseToEdit);
   const dispatch = useDispatch();
-  const expenseToEdit = useSelector(getExpenseToEdit);
 
-  useEffect(() => {
-    setId(expenseToEdit._id);
-    setAmount(expenseToEdit.amount);
-    setTitle(expenseToEdit.title);
-    setDescription(expenseToEdit.description);
-    setCategory(expenseToEdit.category);
-    setDate(expenseToEdit.date);
-    }, []);
+  console.log()
 
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(updateExpense({
-      id,
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    defaultValues: {
+      id: _id, 
       amount,
       title,
       description,
       category,
       date
-    }));
+    }
+  });
+
+  const [displayedDate, setDisplayedDate] = useState(date);
+
+  const onSubmit = (data) => {
+    dispatch(updateExpense({...data}));
     dispatch(closeUpdateModal());
   }
 
@@ -69,18 +57,65 @@ const Form = () => {
       }}
       noValidate
       autoComplete="off"
-      onSubmit={(e) => handleSubmit(e)}
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <TextField onChange={(e) => setAmount(e.target.value)} value={amount || ''} id="standard-basic" label="Amount" variant="outlined" />
-      <TextField onChange={(e) => setTitle(e.target.value)} value={title || ''} id="standard-basic" label="Title" variant="outlined" />
-      <TextField onChange={(e) => setDescription(e.target.value)} value={description || ''} id="standard-basic" label="Description" variant="outlined" />
-      <TextField onChange={(e) => setCategory(e.target.value)} value={category || ''} id="standard-basic" select label="Category" variant="outlined" />
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <TextField 
+        {...register("amount", {
+          required: 'Required',
+          maxLength: {
+            value: 10,
+            message: 'Too long'
+          }
+        })} 
+        type="number"
+        helperText={ errors.amount ? errors.amount.message : ''}
+        label="Amount" 
+        variant="outlined"
+        error={errors.amount ? true : false}
+        InputProps={{
+          startAdornment: '$'
+        }}
+      />
+      <TextField 
+        {...register("title", {
+          required: 'Required',
+          maxLength: {
+            value: 30,
+            message: 'Too long'
+          }
+        })}
+        helperText={ errors.title ? errors.title.message : ''}
+        label="Title" 
+        variant="outlined"
+        error={errors.title ? true : false}
+      />
+      <TextField 
+        {...register("description", {
+          maxLength: {
+            value: 60,
+            message: 'Too long'
+          }
+        })}
+        helperText={ errors.description ? errors.description.message : ''}
+        label="Description"
+        variant="outlined"
+        error={errors.description ? true : false}
+      />
+      <TextField 
+        {...register("category")}
+        label="Category" 
+        variant="outlined" 
+      />
+      <LocalizationProvider dateAdapter={AdapterDate}>
         <MobileDatePicker
-          label="For mobile"
-          value={date}
+          error={errors.date ? true : false}
+          label="Date"
+          value={displayedDate}
+          {...register("date")}
           onChange={(newDate) => {
-            setDate(dayjs(newDate).format('MMMM D YYYY'));
+            const formattedDate = dayjs(newDate).format('MMMM D YYYY');
+            setDisplayedDate(formattedDate);
+            setValue('date', formattedDate, { shouldValidate: true });
           }}
           renderInput={(params) => <TextField {...params} />}
         />

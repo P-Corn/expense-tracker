@@ -15,7 +15,6 @@ import { css } from '@emotion/react';
 import { deleteExpense, editExpense } from '../store/expenses';
 
 export default function ListSection({ date, listOfExpenses }) {
-  const [open, setOpen] = useState(true);
   const [openExpense, setOpenExpense] = useState('');
   const dispatch = useDispatch();
 

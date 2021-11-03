@@ -1,12 +1,13 @@
-import {useEffect, useState} from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, TextField, Box, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeAddModal } from '../store/interface';
 import { addExpense } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import AdapterDate from '@mui/lab/AdapterDayjs';
 import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
 
 const style = {
   position: 'absolute',
@@ -25,24 +26,14 @@ const btnGroup = {
 }
 
 const Form = () => {
-  const [id, setId] = useState("");
-  const [amount, setAmount] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(dayjs());
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(addExpense({
-      amount,
-      title,
-      description,
-      category,
-      date
-    }));
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+
+  const onSubmit = (data) => {
+    dispatch(addExpense(data));
     dispatch(closeAddModal());
   }
 
@@ -54,13 +45,67 @@ const Form = () => {
       }}
       noValidate
       autoComplete="off"
-      onSubmit={(e) => handleSubmit(e)}
+      onSubmit={handleSubmit(onSubmit)}
     >
-      <TextField onChange={(e) => setAmount(e.target.value)} value={amount || ''} id="standard-basic" label="Amount" variant="outlined" />
-      <TextField onChange={(e) => setTitle(e.target.value)} value={title || ''} id="standard-basic" label="Title" variant="outlined" />
-      <TextField onChange={(e) => setDescription(e.target.value)} value={description || ''} id="standard-basic" label="Description" variant="outlined" />
-      <TextField onChange={(e) => setCategory(e.target.value)} value={category || ''} id="standard-basic" label="Category" variant="outlined" />
-      <TextField onChange={(e) => setDate(e.target.value)} value={date || ''} id="standard-basic" label="Date" variant="outlined" />
+      <TextField 
+        {...register("amount", {
+          required: 'Required',
+          maxLength: {
+            value: 10,
+            message: 'Too long'
+          }
+        })} 
+        helperText={ errors.amount ? errors.amount.message : ''}
+        label="Amount" 
+        variant="outlined"
+        error={errors.amount ? true : false}
+      />
+      <TextField 
+        {...register("title", {
+          required: 'Required',
+          maxLength: {
+            value: 30,
+            message: 'Too long'
+          }
+        })} 
+        helperText={ errors.title ? errors.title.message : ''}
+        label="Title" 
+        variant="outlined"
+        error={errors.title ? true : false}
+      />
+      <TextField 
+        {...register("description", {
+          maxLength: {
+            value: 60,
+            message: 'Too long'
+          }
+        })} 
+        helperText={ errors.description ? errors.description.message : ''}
+        label="Description"
+        variant="outlined"
+        error={errors.description ? true : false}
+      />
+      <TextField 
+        {...register("category")} 
+        label="Category" 
+        variant="outlined" 
+      />
+      <LocalizationProvider dateAdapter={AdapterDate}>
+        <MobileDatePicker
+          error={errors.date ? true : false}
+          label="Date"
+          value={date}
+          {...register("date", {
+
+          })}
+          onChange={(newDate) => {
+            const formattedDate = dayjs(newDate).format('MMMM D YYYY');
+            setDate(formattedDate);
+            setValue('date', formattedDate, { shouldValidate: true });
+          }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
       <Box className={btnGroup} sx={{ display: 'flex', justifyContent: 'end' }}>
         <Button onClick={() => dispatch(closeAddModal())}>Cancel</Button>
         <Button type="submit" sx={{ ml: 3 }} variant="contained">Submit</Button>

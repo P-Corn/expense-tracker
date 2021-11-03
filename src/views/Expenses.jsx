@@ -9,12 +9,6 @@ function Expenses() {
   const dispatch = useDispatch();
   const expenses = useSelector(getOrganizedExpenses);
 
-  const handleDelete = id => dispatch(deleteExpense(id));
-
-  useEffect(() => {
-    // console.log(expenses)
-  }, [])
-
   return (
     <Box>
       <Box>
