@@ -54,7 +54,8 @@ const Form = () => {
             value: 10,
             message: 'Too long'
           }
-        })} 
+        })}
+        type="number"
         helperText={ errors.amount ? errors.amount.message : ''}
         label="Amount" 
         variant="outlined"

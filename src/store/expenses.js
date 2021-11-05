@@ -34,9 +34,16 @@ const slice = createSlice({
 
     expensesReceived: (expenses, action) => {
       expenses.list = action.payload;
-      for (let expense of action.payload) {
-        expenses.dates.push(expense.data);
+    },
+
+    datesPopulated: (expenses, action) => {
+      let dateList = [];
+      for (let expense of expenses.list) {
+        let formattedDate = dayjs(expense.date).format('MMM D YYYY');
+        if (!dateList.includes(formattedDate))
+          dateList.push(formattedDate);
       }
+      expenses.dates = dateList;
     },
 
     expenseEdited: (expenses, action) => {
@@ -72,7 +79,8 @@ const {
   expensesReceived,
   expenseDeleted,
   expenseEdited,
-  expenseUpdated
+  expenseUpdated,
+  datesPopulated
 } = slice.actions;
 export default slice.reducer;
 
@@ -90,25 +98,33 @@ const dateReducer = (newObj, expense) => {
   return newObj;
 };
 
+export const populateDates = () => datesPopulated();
+
 export const loadExpenses = () =>
-  (dispatch, getState) => {
-    dispatch(
+  async (dispatch, getState) => {
+    await dispatch(
       apiCallBegan({
         url,
         onStart: expensesRequested.type,
         onSuccess: expensesReceived.type,
         onError: expensesRequestFailed.type
-      })
+      }),
     )
+    dispatch(populateDates())
   };
 
-export const addExpense = expense => 
-  apiCallBegan({
-    url,
-    method: 'post',
-    data: expense,
-    onSuccess: expenseAdded.type
-  })
+export const addExpense = expense =>
+  async (dispatch, getState) => { 
+    await dispatch(
+      apiCallBegan({
+        url,
+        method: 'post',
+        data: expense,
+        onSuccess: expenseAdded.type
+      })
+    )
+  dispatch(populateDates())
+}
 
 export const deleteExpense = expense =>
   apiCallBegan({
@@ -149,4 +165,10 @@ export const getOrganizedExpenses =
   createSelector(
     state => state.entities.expenses.list,
     list => list.reduce(dateReducer, {})
+  )
+
+export const getExpenseDates =
+  createSelector(
+    state => state.entities.expenses,
+    expenses => expenses.dates
   ) 
