@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import { Modal, TextField, Box, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeUpdateModal } from '../store/interface';
-import { getExpenseToEdit, updateExpense } from '../store/expenses';
+import { getExpenseToEdit, updateExpense, populateDates } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDate from '@mui/lab/AdapterDayjs';
@@ -46,6 +46,7 @@ const Form = () => {
 
   const onSubmit = (data) => {
     dispatch(updateExpense({...data}));
+    dispatch(populateDates());
     dispatch(closeUpdateModal());
   }
 

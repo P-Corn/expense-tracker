@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Modal, TextField, Box, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeAddModal } from '../store/interface';
-import { addExpense } from '../store/expenses';
+import { addExpense, populateDates } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDate from '@mui/lab/AdapterDayjs';
@@ -32,8 +32,9 @@ const Form = () => {
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-  const onSubmit = (data) => {
-    dispatch(addExpense(data));
+  const onSubmit = async (data) => {
+    await dispatch(addExpense(data));
+    dispatch(populateDates());
     dispatch(closeAddModal());
   }
 
@@ -96,9 +97,7 @@ const Form = () => {
           error={errors.date ? true : false}
           label="Date"
           value={date}
-          {...register("date", {
-
-          })}
+          {...register("date")}
           onChange={(newDate) => {
             const formattedDate = dayjs(newDate).format('MMMM D YYYY');
             setDate(formattedDate);

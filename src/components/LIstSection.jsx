@@ -22,7 +22,7 @@ export default function ListSection({ date }) {
       }
     >
       { expenses.filter(expense => dayjs(expense.date).format('MMM D YYYY') == date).map((expense) => (
-        <ListItem expense={expense}/>
+        <ListItem key={expense._id} expense={expense}/>
       )) }
     </List>
   );

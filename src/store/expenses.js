@@ -14,6 +14,7 @@ const slice = createSlice({
     lastFetch: null,
     dates: [],
     expenseToEdit: {},
+    datesByMonth: []
   },
   reducers: {
     expensesRequested: (expenses) => {
@@ -37,6 +38,16 @@ const slice = createSlice({
     },
 
     datesPopulated: (expenses, action) => {
+      let dateList = [];
+      for (let expense of expenses.list) {
+        let formattedDate = dayjs(expense.date).format('MMM D YYYY');
+        if (!dateList.includes(formattedDate))
+          dateList.push(formattedDate);
+      }
+      expenses.dates = dateList;
+    },
+
+    datesByMonthPopulated: (expenses, action) => {
       let dateList = [];
       for (let expense of expenses.list) {
         let formattedDate = dayjs(expense.date).format('MMM D YYYY');
@@ -80,7 +91,8 @@ const {
   expenseDeleted,
   expenseEdited,
   expenseUpdated,
-  datesPopulated
+  datesPopulated,
+  datesByMonthPopulated
 } = slice.actions;
 export default slice.reducer;
 
@@ -100,6 +112,8 @@ const dateReducer = (newObj, expense) => {
 
 export const populateDates = () => datesPopulated();
 
+export const populateDatesByMonth = () => datesByMonthPopulated();
+
 export const loadExpenses = () =>
   async (dispatch, getState) => {
     await dispatch(
@@ -114,8 +128,8 @@ export const loadExpenses = () =>
   };
 
 export const addExpense = expense =>
-  async (dispatch, getState) => { 
-    await dispatch(
+  async (dispatch) => { 
+    dispatch(
       apiCallBegan({
         url,
         method: 'post',
@@ -123,7 +137,6 @@ export const addExpense = expense =>
         onSuccess: expenseAdded.type
       })
     )
-  dispatch(populateDates())
 }
 
 export const deleteExpense = expense =>

@@ -12,13 +12,16 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
-import { deleteExpense, editExpense } from '../store/expenses';
+import { deleteExpense, editExpense, populateDates } from '../store/expenses';
 
 export default function ListItem({ expense }) {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
-  const handleDelete = (id) => dispatch(deleteExpense(id));
+  const handleDelete = async (id) => {
+    await dispatch(deleteExpense(id));
+    dispatch(populateDates(id));
+  };
 
   const handleEdit = (expense) => dispatch(editExpense(expense));
 

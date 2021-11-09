@@ -9,13 +9,13 @@ function SortController() {
   const sortMethod = useSelector(getSortMethod);
 
   const listView = (sortMethod) => {
-    if (sortMethod === 'recent') {
+    if (sortMethod === 'Recent') {
       return(
         dates.map((date) => (
-          <ListSection date={date}/>
+          <ListSection key={date} date={date}/>
         ))
       )
-    } else if (sortMethod === 'month') {
+    } else if (sortMethod === 'Month') {
       
     }
   }
