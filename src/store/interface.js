@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 const slice = createSlice({
   name: 'interface',
   initialState: {
-    currentTab: 0,
+    currentTab: '',
     updateModalActive: false,
     addModalActive: false,
     sortMethod: 'Recent',
@@ -28,7 +28,7 @@ const slice = createSlice({
     },
     sortMethodChanged: (state, action) => {
       state.sortMethod = action.payload;
-      if (state.sortMonth) state.sorthMonth = '';
+      if (state.sortMonth) state.sortMonth = '';
     },
     sortMonthChanged: (state, action) => {
       state.sortMonth = action.payload;

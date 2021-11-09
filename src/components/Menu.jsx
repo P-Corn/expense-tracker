@@ -5,6 +5,7 @@ import Menu from '@mui/material/Menu';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { setSortMethod, setSortMonth } from '../store/interface';
+import { populateExpensesByMonth } from '../store/expenses';
 import dateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
@@ -12,7 +13,6 @@ import dayjs from 'dayjs';
 
 export default function BasicMenu() {
   const dispatch = useDispatch();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [month, setMonth] = useState('');
   const open = Boolean(anchorEl);
@@ -30,8 +30,9 @@ export default function BasicMenu() {
   };
 
   const handleDateChange = (newDate) => {
-    setMonth(dayjs(newDate).format('MMMM YYYY'));
-    dispatch(setSortMonth(dayjs(newDate).format('MMMM YYYY')));
+    dispatch(populateExpensesByMonth(newDate));
+    setMonth(newDate);
+    dispatch(setSortMonth(newDate));
     dispatch(setSortMethod('Month'));
   }
 
@@ -63,7 +64,8 @@ export default function BasicMenu() {
             maxDate={new Date('2023-06-01')}
             label="Month"
             value={month}
-            onChange={ (newValue) => handleDateChange(newValue) }
+            onClose={() => handleClose()}
+            onChange={ (newValue) => handleDateChange(dayjs(newValue).format('MMMM YYYY')) }
             renderInput={(params) =>
               <TextField 
                 {...params} 

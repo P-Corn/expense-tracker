@@ -14,7 +14,7 @@ const slice = createSlice({
     lastFetch: null,
     dates: [],
     expenseToEdit: {},
-    datesByMonth: []
+    expensesByMonth: []
   },
   reducers: {
     expensesRequested: (expenses) => {
@@ -47,14 +47,8 @@ const slice = createSlice({
       expenses.dates = dateList;
     },
 
-    datesByMonthPopulated: (expenses, action) => {
-      let dateList = [];
-      for (let expense of expenses.list) {
-        let formattedDate = dayjs(expense.date).format('MMM D YYYY');
-        if (!dateList.includes(formattedDate))
-          dateList.push(formattedDate);
-      }
-      expenses.dates = dateList;
+    expensesByMonthPopulated: (expenses, action) => {
+      expenses.expensesByMonth = action.payload;
     },
 
     expenseEdited: (expenses, action) => {
@@ -92,7 +86,7 @@ const {
   expenseEdited,
   expenseUpdated,
   datesPopulated,
-  datesByMonthPopulated
+  expensesByMonthPopulated
 } = slice.actions;
 export default slice.reducer;
 
@@ -112,7 +106,10 @@ const dateReducer = (newObj, expense) => {
 
 export const populateDates = () => datesPopulated();
 
-export const populateDatesByMonth = () => datesByMonthPopulated();
+export const populateExpensesByMonth = (month) =>
+  (dispatch, getState) => {
+    // if (getState().entities.interface.sortMonth === 'Month')
+  }
 
 export const loadExpenses = () =>
   async (dispatch, getState) => {
