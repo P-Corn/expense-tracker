@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { setSortMethod, setSortMonth } from '../store/interface';
 import { populateExpensesByMonth } from '../store/expenses';
-import dateAdapter from '@mui/lab/AdapterDateFns';
+import dateAdapter from '@mui/lab/AdapterDayjs';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import dayjs from 'dayjs';
@@ -65,7 +65,7 @@ export default function BasicMenu() {
             label="Month"
             value={month}
             onClose={() => handleClose()}
-            onChange={ (newValue) => handleDateChange(dayjs(newValue).format('MMMM YYYY')) }
+            onChange={ (newValue) => handleDateChange(dayjs(newValue)) }
             renderInput={(params) =>
               <TextField 
                 {...params} 
