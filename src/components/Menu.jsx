@@ -32,8 +32,8 @@ export default function BasicMenu() {
   const handleDateChange = (newDate) => {
     dispatch(populateExpensesByMonth(newDate));
     setMonth(newDate);
-    dispatch(setSortMonth(newDate));
     dispatch(setSortMethod('Month'));
+    dispatch(setSortMonth(newDate));
   }
 
   return (
@@ -60,12 +60,12 @@ export default function BasicMenu() {
         <LocalizationProvider dateAdapter={dateAdapter}>
           <DatePicker
             views={['month', 'year']}
-            minDate={new Date('2012-03-01')}
-            maxDate={new Date('2023-06-01')}
+            minDate={dayjs('2012-03-01')}
+            maxDate={dayjs('2023-06-01')}
             label="Month"
             value={month}
             onClose={() => handleClose()}
-            onChange={ (newValue) => handleDateChange(dayjs(newValue)) }
+            onChange={ (newValue) => handleDateChange(dayjs(newValue).format('MMMM YYYY')) }
             renderInput={(params) =>
               <TextField 
                 {...params} 

@@ -8,6 +8,8 @@ function ListHeader(props) {
   const sortMethod = useSelector(getSortMethod);
   const sortMonth = useSelector(getSortMonth);
 
+  console.log(sortMonth)
+
   return (
     <Box sx={{ 
       display: 'flex', 
