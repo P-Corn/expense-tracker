@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux';
 import { Typography, Box } from '@mui/material';
 import Menu from './Menu';
-import { getSortMonth, getSortMethod } from '../store/interface';
+import { getSortMethod } from '../store/interface';
+import { getSortMonth } from '../store/expenses';
 
 function ListHeader(props) {
 

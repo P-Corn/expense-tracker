@@ -4,7 +4,8 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { setSortMethod, setSortMonth } from '../store/interface';
+import { setSortMethod } from '../store/interface';
+import { setSortMonth } from '../store/expenses';
 import { populateExpensesByMonth } from '../store/expenses';
 import dateAdapter from '@mui/lab/AdapterDayjs';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -30,10 +31,12 @@ export default function BasicMenu() {
   };
 
   const handleDateChange = (newDate) => {
-    dispatch(populateExpensesByMonth(newDate));
+    if (newDate === 'Invalid Date')
+      return;
     setMonth(newDate);
     dispatch(setSortMethod('Month'));
     dispatch(setSortMonth(newDate));
+    dispatch(populateExpensesByMonth(newDate));
   }
 
   return (

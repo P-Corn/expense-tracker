@@ -14,7 +14,9 @@ const slice = createSlice({
     lastFetch: null,
     dates: [],
     expenseToEdit: {},
-    expensesByMonth: []
+    expensesByMonth: [],
+    datesByMonth: [],
+    sortMonth: ''
   },
   reducers: {
     expensesRequested: (expenses) => {
@@ -37,7 +39,7 @@ const slice = createSlice({
       expenses.list = action.payload;
     },
 
-    datesPopulated: (expenses, action) => {
+    datesPopulated: (expenses) => {
       let dateList = [];
       for (let expense of expenses.list) {
         let formattedDate = dayjs(expense.date).format('MMM D YYYY');
@@ -47,8 +49,18 @@ const slice = createSlice({
       expenses.dates = dateList;
     },
 
+    datesByMonthPopulated: (expenses) => {
+      let dateList = [];
+      for (let expense of expenses.expensesByMonth) {
+        if (!dateList.includes(expense.date))
+          dateList.push(expense.date);
+      }
+      expenses.datesByMonth = dateList;
+    },
+
     expensesByMonthPopulated: (expenses, action) => {
       expenses.expensesByMonth = action.payload;
+      console.log(expenses.expensesByMonth)
     },
 
     expenseEdited: (expenses, action) => {
@@ -60,20 +72,9 @@ const slice = createSlice({
       expenses.list[expenseToUpdate] = action.payload;
     },
 
-    expensesOrganized: (expenses, action) => {
-      const organizedList = action.payload.reduce((newObj, expense) => {
-        const date = expense.date;
-        if(date in newObj)
-          newObj[date].push(expense);
-        else {
-          newObj[date] = [];
-          newObj[date].push(expense);
-        }
-        return newObj;
-      }, {});
-      expenses.organizedList = {...organizedList};
-      expenses.loading = false;
-    }
+    sortMonthChanged: (state, action) => {
+      state.sortMonth = action.payload;
+    },
   }
 });
 
@@ -86,29 +87,23 @@ const {
   expenseEdited,
   expenseUpdated,
   datesPopulated,
-  expensesByMonthPopulated
+  expensesByMonthPopulated,
+  datesByMonthPopulated,
+  sortMonthChanged
 } = slice.actions;
 export default slice.reducer;
 
 // COMMANDS
 const url = '/expenses';
-const dateReducer = (newObj, expense) => {
-  const date = expense.date;
-  const formattedDate = dayjs(date).format('MMM D YYYY');
-  if (formattedDate in newObj) {
-    newObj[formattedDate].push({ ...expense, date: formattedDate });
-  } else {
-    newObj[formattedDate] = [];
-    newObj[formattedDate].push({ ...expense, date: formattedDate });
-  }
-  return newObj;
-};
 
 export const populateDates = () => datesPopulated();
 
 export const populateExpensesByMonth = (month) =>
-  (dispatch, getState) => {
-    // if (getState().entities.interface.sortMonth === 'Month')
+  async (dispatch, getState) => {
+    const expenses = getState().entities.expenses.list;
+    const expensesByMonth = expenses.filter(expense => dayjs(expense.date).format('MMMM YYYY') === month);
+    await dispatch(expensesByMonthPopulated(expensesByMonth));
+    dispatch(datesByMonthPopulated());
   }
 
 export const loadExpenses = () =>
@@ -158,6 +153,8 @@ export const editExpense = expense =>
     dispatch(expenseEdited(expense));
   }
 
+export const setSortMonth = month => sortMonthChanged(month);
+
 // SELECTORS
 export const getExpenses =
   createSelector(
@@ -171,14 +168,26 @@ export const getExpenseToEdit =
     expenses => expenses.expenseToEdit
   )
 
-export const getOrganizedExpenses =
-  createSelector(
-    state => state.entities.expenses.list,
-    list => list.reduce(dateReducer, {})
-  )
-
-export const getExpenseDates =
+export const getDates =
   createSelector(
     state => state.entities.expenses,
     expenses => expenses.dates
   ) 
+
+export const getDatesByMonth =
+  createSelector(
+    state => state.entities.expenses,
+    expenses => expenses.datesByMonth
+  )   
+
+export const getExpensesByMonth =
+  createSelector(
+    state => state.entities.expenses,
+    expenses => expenses.expensesByMonth
+  )
+
+export const getSortMonth =
+  createSelector(
+    state => state.entities,
+    entities => entities.expenses.sortMonth
+  )

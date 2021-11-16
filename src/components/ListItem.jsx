@@ -1,14 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
-import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import Button from '@mui/material/Button';
 import ListItemButton from '@mui/material/ListItemButton';
-import Card from '@mui/material/Card';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
+import dayjs from 'dayjs';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import { useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
@@ -42,7 +41,7 @@ export default function ListItem({ expense }) {
           <ListItemText primary={`Title: ${expense.title}`}/>
           <ListItemText primary={`Description: ${expense.description}`}/>
           <ListItemText primary={`Category: ${expense.category}`}/>
-          <ListItemText primary={`Date: ${expense.date}`}/>
+          <ListItemText primary={`Date: ${dayjs(expense.date).format('MM/DD/YYYY')}`}/>
         </List>
       </Collapse>
     </div>

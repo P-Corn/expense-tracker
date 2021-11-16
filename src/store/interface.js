@@ -8,7 +8,6 @@ const slice = createSlice({
     updateModalActive: false,
     addModalActive: false,
     sortMethod: 'Recent',
-    sortMonth: ''
   },
   reducers: {
     tabChanged: (state, action) => {
@@ -30,9 +29,6 @@ const slice = createSlice({
       state.sortMethod = action.payload;
       if (state.sortMonth) state.sortMonth = '';
     },
-    sortMonthChanged: (state, action) => {
-      state.sortMonth = action.payload;
-    },
   }
 });
 
@@ -42,9 +38,7 @@ const {
   addModalClosed,
   updateModalOpened,
   updateModalClosed,
-  sortMethodChanged,
-  sortMonthChanged
-
+  sortMethodChanged
 } = slice.actions;
 export default slice.reducer;
 
@@ -55,7 +49,6 @@ export const closeAddModal = () => addModalClosed();
 export const openUpdateModal = () => updateModalOpened();
 export const closeUpdateModal = () => updateModalClosed();
 export const setSortMethod = sortMethod => sortMethodChanged(sortMethod);
-export const setSortMonth = month => sortMonthChanged(month);
 
 // SELECTORS
 export const getCurrentTab =
@@ -68,10 +61,4 @@ export const getSortMethod =
   createSelector(
     state => state.entities,
     entities => entities.interface.sortMethod
-  )
-
-export const getSortMonth =
-  createSelector(
-    state => state.entities,
-    entities => entities.interface.sortMonth
   )
