@@ -3,17 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getDates, getDatesByMonth, getExpenses, getExpensesByMonth, populateExpensesByMonth, getSortMonth } from '../store/expenses';
 import { getSortMethod } from '../store/interface';
 import { useEffect } from 'react';
+import dayjs from 'dayjs';
 
 function SortController() {
   const dates = useSelector(getDates);
   const datesByMonth = useSelector(getDatesByMonth);
   const sortMethod = useSelector(getSortMethod);
   const expenses = useSelector(getExpenses);
-  const sortMonth = useSelector(getSortMonth)
+  const expensesByMonth = useSelector(getExpensesByMonth);
+  const sortMonth = useSelector(getSortMonth);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(sortMonth)
     dispatch(populateExpensesByMonth(sortMonth))
   }, [expenses])
 
@@ -24,18 +25,20 @@ function SortController() {
           <ListSection 
             key={date} 
             date={date} 
-            selector={getExpenses} 
+            expenses={expenses} 
             sortMethod={sortMethod}
           />
         ))
       )
     } else if (sortMethod === 'Month') {
       return(
-        datesByMonth.map((date) => (
+        [...datesByMonth]
+        .sort((a, b) => (dayjs(a).isAfter(dayjs(b)) ? 1 : -1))
+        .map((date) => (
           <ListSection 
             key={date} 
             date={date} 
-            selector={getExpensesByMonth}
+            expenses={expensesByMonth}
             sortMethod={sortMethod}
           />
         ))

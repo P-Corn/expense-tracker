@@ -8,7 +8,6 @@ const slice = createSlice({
   name: 'expenses',
   initialState: {
     list: [],
-    organizedList: {},
     budget: 0,
     loading: false,
     lastFetch: null,
@@ -60,7 +59,6 @@ const slice = createSlice({
 
     expensesByMonthPopulated: (expenses, action) => {
       expenses.expensesByMonth = action.payload;
-      console.log(expenses.expensesByMonth)
     },
 
     expenseEdited: (expenses, action) => {
