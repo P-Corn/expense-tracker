@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import { Modal, TextField, Box, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { closeUpdateModal } from '../store/interface';
+import { toggleUpdateExpenseModal } from '../store/interface';
 import { getExpenseToEdit, updateExpense, populateDates } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -47,7 +47,7 @@ const Form = () => {
   const onSubmit = (data) => {
     dispatch(updateExpense({...data}));
     dispatch(populateDates());
-    dispatch(closeUpdateModal());
+    dispatch(toggleUpdateExpenseModal());
   }
 
   return (
@@ -122,7 +122,7 @@ const Form = () => {
         />
       </LocalizationProvider>
       <Box className={btnGroup} sx={{ display: 'flex', justifyContent: 'end' }}>
-        <Button onClick={() => dispatch(closeUpdateModal())}>Cancel</Button>
+        <Button onClick={() => dispatch(toggleUpdateExpenseModal())}>Cancel</Button>
         <Button type="submit" sx={{ ml: 3 }} variant="contained">Submit</Button>
       </Box>
     </Box>
@@ -130,7 +130,7 @@ const Form = () => {
 }
 
 export default function ExpenseForm() {
-  const open = useSelector(state => state.entities.interface.updateModalActive);
+  const open = useSelector(state => state.entities.interface.updateExpenseModalActive);
 
   return (
     <div>

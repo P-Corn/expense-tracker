@@ -11,7 +11,7 @@ import Summary from './views/Summary';
 import Expenses from './views/Expenses';
 import Settings from './views/Settings';
 import LoadData from './controllers/LoadData';
-import { Box } from '@mui/material';
+import AddCategoryForm from './components/AddCategoryForm';
 
 const store = configureStore();
 
@@ -24,6 +24,7 @@ function App() {
           <Nav />
           <AddExpenseForm />
           <UpdateExpenseForm />
+          <AddCategoryForm />
           <Switch>
             <Route path="/summary">
               <Summary />

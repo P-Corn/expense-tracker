@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { apiCallBegan } from './api';
 import dayjs from 'dayjs';
-import { openUpdateModal } from './interface';
+import { toggleUpdateExpenseModal } from './interface';
 
 const slice = createSlice({
   name: 'expenses',
@@ -147,7 +147,7 @@ export const updateExpense = expense =>
 
 export const editExpense = expense =>
   (dispatch, getState) => {
-    dispatch(openUpdateModal());
+    dispatch(toggleUpdateExpenseModal());
     dispatch(expenseEdited(expense));
   }
 

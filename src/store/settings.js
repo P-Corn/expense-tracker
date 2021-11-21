@@ -7,23 +7,36 @@ const slice = createSlice({
   name: 'settings',
   initialState: {
     loading: false,
-    categories: []
+    categories: [
+      { title: 'Fun Money', budget: '100' },
+      { title: 'Car Note', budget: '320' },
+      { title: 'Groceries', budget: '50' }
+    ]
   },
   reducers: {
     categoriesRequested: (settings, action) => {
-      categories = action.payload
+      settings.categories = action.payload
     },
 
     categoriesRequestFailed: (settings, action) => {
-      categories = action.payload
+      settings.categories = action.payload
     },
 
     categoriesReceived: (settings, action) => {
-      categories = action.payload
+      settings.categories = action.payload
+    },
+
+    categoryAdded: (settings, action) => {
+      settings.categories.push(action.payload);
     },
 
     categoryDeleted: (settings, action) => {
-      settings.categories = expenses.list.filter(expense => expense._id !== action.payload._id)
+      settings.categories = settings.categories.filter(category => category._id !== action.payload._id)
+    },
+
+    categoryUpdated: (settings, action) => {
+      let categoryToUpdate = settings.categories.findIndex(category => category._id === action.payload._id);
+      settings.categories[categoryToUpdate] = action.payload;
     }
   }
 })
@@ -32,7 +45,9 @@ const {
   categoriesRequested,
   categoriesRequestFailed,
   categoriesReceived,
-  categoryDeleted
+  categoryDeleted,
+  categoryAdded,
+  categoryUpdated
 } = slice.actions;
 export default slice.reducer;
 
@@ -51,6 +66,18 @@ export const loadCategories = () =>
     )
   }
 
+export const addCategory = category =>
+  (dispatch) => {
+    dispatch(
+      apiCallBegan({
+        url,
+        method: 'post',
+        data: category,
+        onSuccess: categoryAdded.type
+      })
+    )
+  }
+
 export const deleteCategory = category =>
   apiCallBegan({
     url,
@@ -58,3 +85,20 @@ export const deleteCategory = category =>
     data: category,
     onSuccess: categoryDeleted.type
   })
+
+export const updateCategory = category =>
+  apiCallBegan({
+    url,
+    method: 'put',
+    data: category,
+    onSuccess: categoryUpdated.type
+  })
+
+
+// SELECTORS
+
+export const getCategories = 
+  createSelector(
+    state => state.entities.settings,
+    settings => settings.categories
+  )
