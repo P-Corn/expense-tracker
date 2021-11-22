@@ -1,7 +1,7 @@
 import { Modal, TextField, Box, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleAddCategoryModal } from '../store/interface';
-import { addCategory } from '../store/settings';
+import { toggleUpdateCategoryModal } from '../store/interface';
+import { updateCategory, getCategoryBeingEdited, editCategory } from '../store/settings';
 import { useForm } from 'react-hook-form';
 
 const style = {
@@ -22,12 +22,23 @@ const btnGroup = {
 
 const Form = () => {
   const dispatch = useDispatch();
+  const { _id, title, budget } = useSelector(getCategoryBeingEdited);
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      id: _id,
+      title,
+      budget
+    }
+  });
 
-  const onSubmit = async (data) => {
-    dispatch(addCategory(data));
-    dispatch(toggleAddCategoryModal());
+  const handleClose = () => {
+    dispatch(editCategory({}));
+  }
+
+  const onSubmit = (data) => {
+    dispatch(updateCategory(data));
+    dispatch(toggleUpdateCategoryModal());
   }
 
   return (
@@ -68,15 +79,15 @@ const Form = () => {
         error={errors.amount ? true : false}
       />
       <Box className={btnGroup} sx={{ display: 'flex', justifyContent: 'end' }}>
-        <Button onClick={() => dispatch(toggleAddCategoryModal())}>Cancel</Button>
+        <Button onClick={handleClose}>Cancel</Button>
         <Button type="submit" sx={{ ml: 3 }} variant="contained">Submit</Button>
       </Box>
     </Box>
   )
 }
 
-export default function ExpenseForm() {
-  const open = useSelector(state => state.entities.interface.addCategoryModalActive);
+export default function UpdateCategoryForm() {
+  const open = useSelector(state => state.entities.interface.updateCategoryModalActive);
 
   return (
     <div>

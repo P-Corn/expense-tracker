@@ -12,6 +12,7 @@ import Expenses from './views/Expenses';
 import Settings from './views/Settings';
 import LoadData from './controllers/LoadData';
 import AddCategoryForm from './components/AddCategoryForm';
+import UpdateCategoryForm from './components/UpdateCategoryForm';
 
 const store = configureStore();
 
@@ -25,6 +26,7 @@ function App() {
           <AddExpenseForm />
           <UpdateExpenseForm />
           <AddCategoryForm />
+          <UpdateCategoryForm />
           <Switch>
             <Route path="/summary">
               <Summary />

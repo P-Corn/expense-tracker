@@ -119,7 +119,7 @@ export const loadExpenses = () =>
 
 export const addExpense = expense =>
   async (dispatch) => { 
-    dispatch(
+    await dispatch(
       apiCallBegan({
         url,
         method: 'post',
@@ -127,26 +127,37 @@ export const addExpense = expense =>
         onSuccess: expenseAdded.type
       })
     )
+    dispatch(loadExpenses());
 }
 
-export const deleteExpense = expense =>
-  apiCallBegan({
-    url,
-    method: 'delete',
-    data: expense,
-    onSuccess: expenseDeleted.type
-  })
+export const deleteExpense = expense => 
+  async (dispatch) => {
+    await dispatch(
+      apiCallBegan({
+        url,
+        method: 'delete',
+        data: expense,
+        onSuccess: expenseDeleted.type
+      })
+    )
+   dispatch(loadExpenses());
+  }
 
 export const updateExpense = expense =>
-  apiCallBegan({
-    url,
-    method: 'put',
-    data: expense,
-    onSuccess: expenseUpdated.type
-  })
+  async (dispatch) => {
+    await dispatch(
+      apiCallBegan({
+        url,
+        method: 'put',
+        data: expense,
+        onSuccess: expenseUpdated.type
+      })
+    )
+    dispatch(loadExpenses());
+  }
 
 export const editExpense = expense =>
-  (dispatch, getState) => {
+  (dispatch) => {
     dispatch(toggleUpdateExpenseModal());
     dispatch(expenseEdited(expense));
   }

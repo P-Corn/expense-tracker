@@ -37,7 +37,7 @@ export default function ListItem({ expense }) {
         `} component="div">
           <Button onClick={() => handleDelete(expense._id)}>Delete</Button>
           <Button onClick={() => handleEdit(expense)}>Edit</Button>
-          <ListItemText primary={`Amount: ${expense.amount}`}/>
+          <ListItemText primary={`Amount: $${expense.amount}`}/>
           <ListItemText primary={`Title: ${expense.title}`}/>
           <ListItemText primary={`Description: ${expense.description}`}/>
           <ListItemText primary={`Category: ${expense.category}`}/>

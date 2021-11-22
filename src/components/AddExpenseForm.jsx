@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Modal, TextField, Box, Button } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Modal, TextField, Box, Button, Select, MenuItem } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleAddExpenseModal } from '../store/interface';
+import { getCategories } from '../store/settings';
 import { addExpense, populateDates } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -30,11 +31,19 @@ const Form = () => {
 
   const dispatch = useDispatch();
 
+  const categories = useSelector(getCategories) || [];
+
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-  const onSubmit = async (data) => {
-    await dispatch(addExpense(data));
-    dispatch(populateDates());
+  useEffect(() => {
+    if (categories !== []) {
+      setValue('category', categories[0])
+      console.log(categories[0])
+    }
+  }, [categories])
+
+  const onSubmit = (data) => {
+    dispatch(addExpense(data));
     dispatch(toggleAddExpenseModal());
   }
 
@@ -88,10 +97,22 @@ const Form = () => {
         error={errors.description ? true : false}
       />
       <TextField 
-        {...register("category")} 
-        label="Category" 
-        variant="outlined" 
-      />
+        {...register("category", {
+          required: 'Required',
+        })}
+        select
+        onChange={(category) => { setValue('category', category, { shouldValidate: true }) }}
+        label="Category"
+        variant="outlined"
+        helperText={ errors.category ? errors.category.message : ''}
+        error={errors.category ? true : false}
+      >
+        {
+          categories.map(category => (
+            <MenuItem key={category._id} value={category.title}>{category.title}</MenuItem>
+          ))
+        }
+      </TextField>
       <LocalizationProvider dateAdapter={AdapterDate}>
         <MobileDatePicker
           error={errors.date ? true : false}

@@ -8,8 +8,8 @@ const slice = createSlice({
     updateExpenseModalActive: false,
     addExpenseModalActive: false,
     addCategoryModalActive: false,
+    updateCategoryModalActive: false,
     sortMethod: 'Recent',
-
   },
   reducers: {
     tabChanged: (state, action) => { state.currentTab = action.payload.currentTab },
@@ -20,7 +20,7 @@ const slice = createSlice({
 
     addCategoryModalToggled: (state) => { state.addCategoryModalActive = !state.addCategoryModalActive; },
 
-    // updateCategoryModalToggled: (state) => { state.updateExpenseModalActive = !state.updateExpenseModalActive; },
+    updateCategoryModalToggled: (state) => { state.updateCategoryModalActive = !state.updateCategoryModalActive; },
 
     sortMethodChanged: (state, action) => {
       state.sortMethod = action.payload;
@@ -34,6 +34,7 @@ const {
   addExpenseModalToggled,
   updateExpenseModalToggled,
   addCategoryModalToggled,
+  updateCategoryModalToggled,
   sortMethodChanged
 } = slice.actions;
 export default slice.reducer;
@@ -43,6 +44,7 @@ export const changeTab = currentTab => tabChanged({ currentTab });
 export const toggleAddExpenseModal = () => addExpenseModalToggled();
 export const toggleUpdateExpenseModal = () => updateExpenseModalToggled();
 export const toggleAddCategoryModal = () => addCategoryModalToggled();
+export const toggleUpdateCategoryModal = () => updateCategoryModalToggled();
 export const setSortMethod = sortMethod => sortMethodChanged(sortMethod);
 
 // SELECTORS

@@ -2,16 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { apiCallBegan } from './api';
 import dayjs from 'dayjs';
+import expenses from './expenses';
+import { toggleUpdateCategoryModal } from './interface';
 
 const slice = createSlice({
   name: 'settings',
   initialState: {
     loading: false,
-    categories: [
-      { title: 'Fun Money', budget: '100' },
-      { title: 'Car Note', budget: '320' },
-      { title: 'Groceries', budget: '50' }
-    ]
+    categories: [],
+    categoryBeingEdited: {}
   },
   reducers: {
     categoriesRequested: (settings, action) => {
@@ -37,6 +36,10 @@ const slice = createSlice({
     categoryUpdated: (settings, action) => {
       let categoryToUpdate = settings.categories.findIndex(category => category._id === action.payload._id);
       settings.categories[categoryToUpdate] = action.payload;
+    },
+
+    categoryEdited: (settings, action) => {
+      settings.categoryBeingEdited = action.payload;
     }
   }
 })
@@ -47,6 +50,7 @@ const {
   categoriesReceived,
   categoryDeleted,
   categoryAdded,
+  categoryEdited,
   categoryUpdated
 } = slice.actions;
 export default slice.reducer;
@@ -54,14 +58,20 @@ export default slice.reducer;
 // COMMANDS
 const url = '/categories';
 
+export const editCategory = category =>
+  (dispatch) => {
+    dispatch(toggleUpdateCategoryModal());
+    dispatch(categoryEdited(category));
+  }
+
 export const loadCategories = () =>
   (dispatch) => {
     dispatch(
       apiCallBegan({
         url,
-        onStart: categoriesRequested,
+        onStart: categoriesRequested.type,
         onSuccess: categoriesReceived.type,
-        onError: categoriesRequestFailed
+        onError: categoriesRequestFailed.type
       })
     )
   }
@@ -101,4 +111,10 @@ export const getCategories =
   createSelector(
     state => state.entities.settings,
     settings => settings.categories
+  )
+
+export const getCategoryBeingEdited = 
+  createSelector(
+    state => state.entities.settings,
+    settings => settings.categoryBeingEdited
   )

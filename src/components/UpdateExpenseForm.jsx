@@ -1,8 +1,9 @@
 import {useEffect, useState} from 'react';
-import { Modal, TextField, Box, Button } from '@mui/material';
+import { Modal, TextField, Box, Button, Select, MenuItem } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleUpdateExpenseModal } from '../store/interface';
-import { getExpenseToEdit, updateExpense, populateDates } from '../store/expenses';
+import { getCategories } from '../store/settings';
+import { getExpenseToEdit, updateExpense } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDate from '@mui/lab/AdapterDayjs';
@@ -29,7 +30,7 @@ const Form = () => {
   const { _id, amount, title, description, category, date } = useSelector(getExpenseToEdit);
   const dispatch = useDispatch();
 
-  console.log()
+  const categories = useSelector(getCategories);
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     defaultValues: {
@@ -46,7 +47,6 @@ const Form = () => {
 
   const onSubmit = (data) => {
     dispatch(updateExpense({...data}));
-    dispatch(populateDates());
     dispatch(toggleUpdateExpenseModal());
   }
 
@@ -103,10 +103,21 @@ const Form = () => {
         error={errors.description ? true : false}
       />
       <TextField 
-        {...register("category")}
-        label="Category" 
-        variant="outlined" 
-      />
+        {...register("category", {
+          required: 'Required',
+        })}
+        select
+        onChange={(category) => { setValue('category', category, { shouldValidate: true }) }}
+        label="Category"
+        variant="outlined"
+        error={errors.category ? true : false}
+      >
+        {
+          categories.map(category => (
+            <MenuItem key={category._id} value={category.title}>{category.title}</MenuItem>
+          ))
+        }
+      </TextField>
       <LocalizationProvider dateAdapter={AdapterDate}>
         <MobileDatePicker
           error={errors.date ? true : false}
