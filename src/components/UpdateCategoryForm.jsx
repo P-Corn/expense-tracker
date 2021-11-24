@@ -1,7 +1,7 @@
 import { Modal, TextField, Box, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleUpdateCategoryModal } from '../store/interface';
-import { updateCategory, getCategoryBeingEdited, editCategory } from '../store/settings';
+import { updateCategory, getCategoryBeingEdited, editCategory } from '../store/categories';
 import { useForm } from 'react-hook-form';
 
 const style = {

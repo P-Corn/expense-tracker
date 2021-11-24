@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Modal, TextField, Box, Button, Select, MenuItem } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleAddExpenseModal } from '../store/interface';
-import { getCategories } from '../store/settings';
+import { getCategories } from '../store/categories';
 import { addExpense, populateDates } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';

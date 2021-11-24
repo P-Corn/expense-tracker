@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadExpenses } from '../store/expenses';
-import { loadCategories } from '../store/settings';
+import { loadCategories } from '../store/categories';
 import { Box } from '@mui/material';
 
 export default function LoadData({children}) {

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
+import dayjs from 'dayjs';
 
 const slice = createSlice({
   name: 'interface',
@@ -10,6 +11,7 @@ const slice = createSlice({
     addCategoryModalActive: false,
     updateCategoryModalActive: false,
     sortMethod: 'Recent',
+    dateToSummarize: dayjs().format('MMMM YYYY')
   },
   reducers: {
     tabChanged: (state, action) => { state.currentTab = action.payload.currentTab },
@@ -21,6 +23,8 @@ const slice = createSlice({
     addCategoryModalToggled: (state) => { state.addCategoryModalActive = !state.addCategoryModalActive; },
 
     updateCategoryModalToggled: (state) => { state.updateCategoryModalActive = !state.updateCategoryModalActive; },
+    
+    dateToSummarizeUpdated: (state, action) => { state.dateToSummarize = action.payload; },
 
     sortMethodChanged: (state, action) => {
       state.sortMethod = action.payload;
@@ -35,7 +39,8 @@ const {
   updateExpenseModalToggled,
   addCategoryModalToggled,
   updateCategoryModalToggled,
-  sortMethodChanged
+  sortMethodChanged,
+  dateToSummarizeUpdated
 } = slice.actions;
 export default slice.reducer;
 
@@ -46,6 +51,7 @@ export const toggleUpdateExpenseModal = () => updateExpenseModalToggled();
 export const toggleAddCategoryModal = () => addCategoryModalToggled();
 export const toggleUpdateCategoryModal = () => updateCategoryModalToggled();
 export const setSortMethod = sortMethod => sortMethodChanged(sortMethod);
+export const setDateToSummarize = date => dateToSummarizeUpdated(date);
 
 // SELECTORS
 export const getCurrentTab =
@@ -58,4 +64,10 @@ export const getSortMethod =
   createSelector(
     state => state.entities,
     entities => entities.interface.sortMethod
+  )
+
+export const getDateToSummarize =
+  createSelector(
+    state => state.entities,
+    entities => entities.interface.dateToSummarize
   )

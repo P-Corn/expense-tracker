@@ -1,45 +1,43 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { apiCallBegan } from './api';
-import dayjs from 'dayjs';
-import expenses from './expenses';
 import { toggleUpdateCategoryModal } from './interface';
 
 const slice = createSlice({
-  name: 'settings',
+  name: 'categories',
   initialState: {
     loading: false,
     categories: [],
     categoryBeingEdited: {}
   },
   reducers: {
-    categoriesRequested: (settings, action) => {
-      settings.categories = action.payload
+    categoriesRequested: (categories, action) => {
+      categories.categories = action.payload
     },
 
-    categoriesRequestFailed: (settings, action) => {
-      settings.categories = action.payload
+    categoriesRequestFailed: (categories, action) => {
+      categories.categories = action.payload
     },
 
-    categoriesReceived: (settings, action) => {
-      settings.categories = action.payload
+    categoriesReceived: (categories, action) => {
+      categories.categories = action.payload
     },
 
-    categoryAdded: (settings, action) => {
-      settings.categories.push(action.payload);
+    categoryAdded: (categories, action) => {
+      categories.categories.push(action.payload);
     },
 
-    categoryDeleted: (settings, action) => {
-      settings.categories = settings.categories.filter(category => category._id !== action.payload._id)
+    categoryDeleted: (categories, action) => {
+      categories.categories = categories.categories.filter(category => category._id !== action.payload._id)
     },
 
-    categoryUpdated: (settings, action) => {
-      let categoryToUpdate = settings.categories.findIndex(category => category._id === action.payload._id);
-      settings.categories[categoryToUpdate] = action.payload;
+    categoryUpdated: (categories, action) => {
+      let categoryToUpdate = categories.categories.findIndex(category => category._id === action.payload._id);
+      categories.categories[categoryToUpdate] = action.payload;
     },
 
-    categoryEdited: (settings, action) => {
-      settings.categoryBeingEdited = action.payload;
+    categoryEdited: (categories, action) => {
+      categories.categoryBeingEdited = action.payload;
     }
   }
 })
@@ -109,12 +107,12 @@ export const updateCategory = category =>
 
 export const getCategories = 
   createSelector(
-    state => state.entities.settings,
-    settings => settings.categories
+    state => state.entities.categories,
+    categories => categories.categories
   )
 
 export const getCategoryBeingEdited = 
   createSelector(
-    state => state.entities.settings,
-    settings => settings.categoryBeingEdited
+    state => state.entities.categories,
+    categories => categories.categoryBeingEdited
   )

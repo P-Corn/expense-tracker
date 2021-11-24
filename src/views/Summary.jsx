@@ -1,12 +1,17 @@
-import { useEffect } from 'react';
-import { loadExpenses } from '../store/expenses.js';
-import { useDispatch } from 'react-redux';
+import ListHeader from "../components/ListHeader";
+import DatePickerButton from '../components/DatePickerButton';
+import { getDateToSummarize } from '../store/interface';
+import { useSelector } from "react-redux";
+import SummarizedData from '../controllers/SummarizedData';
+
 
 function Summary() {
+  const dateToSummarize = useSelector(getDateToSummarize);
 
   return (
     <div>
-      Summary
+      <ListHeader title={dateToSummarize} Button={<DatePickerButton />}/>
+      <SummarizedData />
     </div>
   );
 }

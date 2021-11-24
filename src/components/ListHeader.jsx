@@ -1,15 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Typography, Box } from '@mui/material';
-import Menu from './Menu';
-import { getSortMethod } from '../store/interface';
-import { getSortMonth } from '../store/expenses';
 
-function ListHeader(props) {
-
-  const sortMethod = useSelector(getSortMethod);
-  const sortMonth = useSelector(getSortMonth);
-
-  console.log(sortMonth)
+function ListHeader({ title, Button }) {
 
   return (
     <Box sx={{ 
@@ -22,11 +14,11 @@ function ListHeader(props) {
           variant="h5"
           component="h2"
         >
-          { sortMethod === 'Recent' ? sortMethod : sortMonth }
+          { title }
         </Typography>
       </Box>
       <Box>
-        <Menu />
+        { Button }
       </Box>
     </Box>
   );

@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemText, IconButton, Button, Box, Menu, MenuItem, Divider } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddIcon from '@mui/icons-material/Add';
-import { getCategories, editCategory, deleteCategory } from '../store/settings';
+import { getCategories, editCategory, deleteCategory } from '../store/categories';
 import { toggleAddCategoryModal } from '../store/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
