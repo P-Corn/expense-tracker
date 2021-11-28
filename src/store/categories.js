@@ -55,8 +55,7 @@ const {
   categoryDeleted,
   categoryAdded,
   categoryEdited,
-  categoryUpdated,
-  categoryTotalsSet
+  categoryUpdated
 } = slice.actions;
 export default slice.reducer;
 
@@ -109,15 +108,6 @@ export const updateCategory = category =>
     onSuccess: categoryUpdated.type
   })
 
-export const setCategoryTotals = () =>
-  (dispatch, getState) => {
-    const date = getState().entities.interface.dateToSummarize;
-    const categories = getState().entities.categories.categories;
-    const totals = categories.map((category) => ({ title: category.title, total: 0 }));
-    console.log(totals)
-    dispatch(categoryTotalsSet())
-  }
-
 
 // SELECTORS
 
@@ -131,4 +121,24 @@ export const getCategoryBeingEdited =
   createSelector(
     state => state.entities.categories,
     categories => categories.categoryBeingEdited
+  )
+
+export const getCategoryTotals = 
+  createSelector(
+    state => state.entities.expenses.list,
+    state => state.entities.interface.dateToSummarize,
+    (list, date) => list.reduce((currState, listItem) => {
+      if (!dayjs(listItem.date).format('MMMM YYYY') === date)
+        return currState;
+      
+      const index = currState.findIndex((el => el.category === listItem.category));
+
+      if (index === -1) {
+        return [...currState, { category: listItem.category, total: 0 }];
+      }
+      else {
+        currState[index].total += parseInt(listItem.amount);
+        return currState;
+      }
+    }, [])
   )

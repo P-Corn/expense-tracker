@@ -2,13 +2,13 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
 Chart.register(ArcElement, Tooltip, Legend);
 
-const BarChart = ({ categories, expenses }) => {
+const BarChart = ({ data }) => {
   const chartData = {
-    labels: categories.map(category => category.title),
+    labels: data.map(item => item.category),
     datasets: [
       {
         label: '# of Votes',
-        data: categories.map(category => category.total),
+        data: data.map(item => item.total),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
