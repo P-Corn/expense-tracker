@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { apiCallBegan } from './api';
+import dayjs from 'dayjs';
 import { toggleUpdateCategoryModal } from './interface';
 
 const slice = createSlice({
@@ -8,7 +9,8 @@ const slice = createSlice({
   initialState: {
     loading: false,
     categories: [],
-    categoryBeingEdited: {}
+    categoryBeingEdited: {},
+    categoryTotals: []
   },
   reducers: {
     categoriesRequested: (categories, action) => {
@@ -38,6 +40,10 @@ const slice = createSlice({
 
     categoryEdited: (categories, action) => {
       categories.categoryBeingEdited = action.payload;
+    },
+
+    categoryTotalsSet: (categories, action) => {
+      categories.categoryTotals = action.payload;
     }
   }
 })
@@ -49,7 +55,8 @@ const {
   categoryDeleted,
   categoryAdded,
   categoryEdited,
-  categoryUpdated
+  categoryUpdated,
+  categoryTotalsSet
 } = slice.actions;
 export default slice.reducer;
 
@@ -101,6 +108,15 @@ export const updateCategory = category =>
     data: category,
     onSuccess: categoryUpdated.type
   })
+
+export const setCategoryTotals = () =>
+  (dispatch, getState) => {
+    const date = getState().entities.interface.dateToSummarize;
+    const categories = getState().entities.categories.categories;
+    const totals = categories.map((category) => ({ title: category.title, total: 0 }));
+    console.log(totals)
+    dispatch(categoryTotalsSet())
+  }
 
 
 // SELECTORS
