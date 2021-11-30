@@ -13,6 +13,7 @@ import Settings from './views/Settings';
 import LoadData from './controllers/LoadData';
 import AddCategoryForm from './components/AddCategoryForm';
 import UpdateCategoryForm from './components/UpdateCategoryForm';
+import { Box } from '@mui/system';
 
 const store = configureStore();
 
@@ -27,17 +28,19 @@ function App() {
           <UpdateExpenseForm />
           <AddCategoryForm />
           <UpdateCategoryForm />
-          <Switch>
-            <Route path="/summary">
-              <Summary />
-            </Route>
-            <Route path="/expenses">
-              <Expenses />
-            </Route>
-            <Route path="/settings">
-              <Settings />
-            </Route>
-          </Switch>
+          <Box sx={{ height: `${window.innerHeight - 170}px` }}>
+            <Switch>
+              <Route path="/summary">
+                <Summary />
+              </Route>
+              <Route path="/expenses">
+                <Expenses />
+              </Route>
+              <Route path="/settings">
+                <Settings />
+              </Route>
+            </Switch>
+          </Box>
         </LoadData>
         <BottomNav />
       </Router>

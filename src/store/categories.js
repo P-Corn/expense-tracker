@@ -128,17 +128,24 @@ export const getCategoryTotals =
     state => state.entities.expenses.list,
     state => state.entities.interface.dateToSummarize,
     (list, date) => list.reduce((currState, listItem) => {
-      if (!dayjs(listItem.date).format('MMMM YYYY') === date)
-        return currState;
-      
-      const index = currState.findIndex((el => el.category === listItem.category));
+      if (dayjs(listItem.date).format('MMMM YYYY') !== date) {
+        return { ...currState };
+      }
 
-      if (index === -1) {
-        return [...currState, { category: listItem.category, total: 0 }];
+      if (listItem.category in currState) {
+        const total = parseFloat(listItem.amount) + currState[listItem.category];
+        return { ...currState, [listItem.category]: total }
       }
       else {
-        currState[index].total += parseInt(listItem.amount);
-        return currState;
+        return { ...currState, [listItem.category]: parseFloat(listItem.amount) };
       }
-    }, [])
+    }, {})
+  )
+
+export const getTotalBudget =
+  createSelector(
+    state => state.entities.categories.categories,
+    categories => categories.reduce((currVal, category) => {
+      return currVal += parseFloat(category.budget);
+    }, 0)
   )

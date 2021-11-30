@@ -11,7 +11,9 @@ const slice = createSlice({
     addCategoryModalActive: false,
     updateCategoryModalActive: false,
     sortMethod: 'Recent',
-    dateToSummarize: dayjs().format('MMMM YYYY')
+    dateToSummarize: dayjs().format('MMMM YYYY'),
+    viewWidth: window.innerWidth,
+    viewHeight: window.innerHeight
   },
   reducers: {
     tabChanged: (state, action) => { state.currentTab = action.payload.currentTab },
@@ -25,6 +27,10 @@ const slice = createSlice({
     updateCategoryModalToggled: (state) => { state.updateCategoryModalActive = !state.updateCategoryModalActive; },
     
     dateToSummarizeUpdated: (state, action) => { state.dateToSummarize = action.payload; },
+
+    viewWidthUpdated: (state, action) => { state.viewWidth = action.payload; },
+
+    viewHeightUpdated: (state, action) => { state.viewHeight = action.payload; },
 
     sortMethodChanged: (state, action) => {
       state.sortMethod = action.payload;
@@ -40,7 +46,9 @@ const {
   addCategoryModalToggled,
   updateCategoryModalToggled,
   sortMethodChanged,
-  dateToSummarizeUpdated
+  dateToSummarizeUpdated,
+  viewWidthUpdated,
+  viewHeightUpdated
 } = slice.actions;
 export default slice.reducer;
 
@@ -52,6 +60,8 @@ export const toggleAddCategoryModal = () => addCategoryModalToggled();
 export const toggleUpdateCategoryModal = () => updateCategoryModalToggled();
 export const setSortMethod = sortMethod => sortMethodChanged(sortMethod);
 export const setDateToSummarize = date => dateToSummarizeUpdated(date);
+export const setViewWidth = size => viewWidthUpdated(size);
+export const setViewHeight = size => viewHeightUpdated(size);
 
 // SELECTORS
 export const getCurrentTab =
@@ -70,4 +80,16 @@ export const getDateToSummarize =
   createSelector(
     state => state.entities,
     entities => entities.interface.dateToSummarize
+  )
+
+export const getViewWidth =
+  createSelector(
+    state => state.entities,
+    entities => entities.interface.viewWidth
+  )
+
+export const getViewHeight =
+  createSelector(
+    state => state.entities,
+    entities => entities.interface.viewHeight
   )

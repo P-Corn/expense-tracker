@@ -13,11 +13,12 @@ function Expenses() {
   const sortMonth = useSelector(getSortMonth);
 
   return (
-    <Box>
+    <Box sx={{ maxWidth: 800, mx: 'auto' }}>
       <ListHeader title={ sortMethod === 'Recent' ? sortMethod : sortMonth } Button={<Menu />} />
       <Box>
         <SortController />
       </Box>
+      <Box py={3} />
     </Box>
   )
 }

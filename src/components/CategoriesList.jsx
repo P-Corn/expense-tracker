@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, IconButton, Button, Box, Menu, MenuItem, Divider } from '@mui/material';
+import { List, ListItem, ListItemText, IconButton, Button, Box, Menu, MenuItem, Divider, ListSubheader } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddIcon from '@mui/icons-material/Add';
 import { getCategories, editCategory, deleteCategory } from '../store/categories';
@@ -9,6 +9,14 @@ import { useState, useEffect } from 'react';
 function CategoriesList(props) {
   const dispatch = useDispatch();
   const categories = useSelector(getCategories) || [];
+
+  const [totalBudget, setTotalBudget] = useState(0);
+  useEffect(() => {
+    const total = categories.reduce((currVal, category) => {
+      return currVal += parseFloat(category.budget);
+    }, 0)
+    setTotalBudget(total);
+  }, [categories])
   
   // MENU
   const [anchorEl, setAnchorEl] = useState(null);
@@ -22,8 +30,6 @@ function CategoriesList(props) {
     setAnchorEl(null);
     setOpen('');
   };
-
-  useEffect(() => console.log('rendered'), [])
 
    // HANDLERS
   const handleEdit = category => {
@@ -56,7 +62,13 @@ function CategoriesList(props) {
 
   return (
     <div>
-      <List>
+      <List
+        subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+            Monthly Budget - { `$${totalBudget}` }
+          </ListSubheader>
+        }
+      >
         {
           categories.map(category => (
             <div key={category._id}>
