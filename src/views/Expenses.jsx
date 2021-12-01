@@ -7,7 +7,6 @@ import { getSortMethod } from '../store/interface';
 import { getSortMonth } from '../store/expenses';
 import Menu from '../components/Menu';
 
-
 function Expenses() {
   const sortMethod = useSelector(getSortMethod);
   const sortMonth = useSelector(getSortMonth);

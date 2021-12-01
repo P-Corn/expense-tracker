@@ -14,14 +14,15 @@ const slice = createSlice({
   },
   reducers: {
     categoriesRequested: (categories, action) => {
-      categories.categories = action.payload
+      categories.loading = true;
     },
 
     categoriesRequestFailed: (categories, action) => {
-      categories.categories = action.payload
+      categories.loading = false;
     },
 
     categoriesReceived: (categories, action) => {
+      categories.loading = false;
       categories.categories = action.payload
     },
 

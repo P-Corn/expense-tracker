@@ -31,7 +31,7 @@ const Form = () => {
 
   const dispatch = useDispatch();
 
-  const categories = useSelector(getCategories) || [];
+  const categories = useSelector(getCategories);
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 

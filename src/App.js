@@ -6,7 +6,7 @@ import configureStore from './store/configureStore';
 import AddExpenseForm from './components/AddExpenseForm';
 import UpdateExpenseForm from './components/UpdateExpenseForm';
 import BottomNav from './views/BottomNav';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Summary from './views/Summary';
 import Expenses from './views/Expenses';
 import Settings from './views/Settings';
@@ -30,6 +30,9 @@ function App() {
           <UpdateCategoryForm />
           <Box sx={{ height: `${window.innerHeight - 170}px` }}>
             <Switch>
+              <Route exact path="/">
+                <Redirect to="/summary" />
+              </Route>
               <Route path="/summary">
                 <Summary />
               </Route>

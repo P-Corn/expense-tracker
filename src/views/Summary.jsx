@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import SummarizedData from '../controllers/SummarizedData';
 import { Box } from '@mui/material';
 
-
 function Summary() {
   const dateToSummarize = useSelector(getDateToSummarize);
 

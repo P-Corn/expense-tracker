@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 
 function CategoriesList(props) {
   const dispatch = useDispatch();
-  const categories = useSelector(getCategories) || [];
+  const categories = useSelector(getCategories);
 
   const [totalBudget, setTotalBudget] = useState(0);
   useEffect(() => {

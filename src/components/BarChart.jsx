@@ -6,7 +6,7 @@ import { getViewWidth } from '../store/interface';
 import { useSelector } from 'react-redux';
 Chart.register(ArcElement, Tooltip, Legend);
 
-const BarChart = ({ data }) => {
+const BarChart = ({ data, totalSpent }) => {
 
   const viewWidth = useSelector(getViewWidth);
   const totalBudget = useSelector(getTotalBudget);
@@ -47,10 +47,9 @@ const BarChart = ({ data }) => {
       <Box sx={{ 
         position: 'absolute',
         left: '50%',
-        ml: '-7px',
+        mx: 'auto',
         top: '50%',
-        mt: '-7px',
-      }}>{totalBudget}</Box>
+      }}>{`Budget: $${totalBudget}`}<br/> {`Spent: $${totalSpent}`}</Box>
     </Box>
   )
 }

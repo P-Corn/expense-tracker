@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 const slice = createSlice({
   name: 'interface',
   initialState: {
-    currentTab: '',
+    currentTab: 0,
     updateExpenseModalActive: false,
     addExpenseModalActive: false,
     addCategoryModalActive: false,
