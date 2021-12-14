@@ -12,7 +12,7 @@ const api = ({ dispatch }) => next => async action => {
 
   try {
     const response = await axios.request({
-      baseURL: `http://localhost:3001`,
+      baseURL: `https://expense-tracker-node.herokuapp.com`,
       url,
       method,
       data: method === 'delete' ? { id: data } : { ...data }
