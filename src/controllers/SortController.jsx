@@ -1,4 +1,4 @@
-import ListSection from '../components/ListSection';
+import ListSection from '../components/LIstSection';
 import { useSelector } from 'react-redux';
 import { getDates, getDatesByMonth, getExpenses, getExpensesByMonth } from '../store/expenses';
 import { getSortMethod } from '../store/interface';
