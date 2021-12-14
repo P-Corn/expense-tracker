@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Modal, TextField, Box, Button, Select, MenuItem } from '@mui/material';
+import { useState } from 'react';
+import { Modal, TextField, Box, Button, MenuItem } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleAddExpenseModal } from '../store/interface';
 import { getCategories } from '../store/categories';
-import { addExpense, populateDates } from '../store/expenses';
+import { addExpense } from '../store/expenses';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDate from '@mui/lab/AdapterDayjs';
@@ -28,22 +28,13 @@ const btnGroup = {
 
 const Form = () => {
   const [date, setDate] = useState(dayjs());
-
   const dispatch = useDispatch();
-
   const categories = useSelector(getCategories);
-
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-  useEffect(() => {
-    if (categories !== []) {
-      setValue('category', categories[0])
-      console.log(categories[0])
-    }
-  }, [categories])
-
   const onSubmit = (data) => {
-    dispatch(addExpense(data));
+    let amount = parseFloat(data.amount).toFixed(2).toString();
+    dispatch(addExpense({...data, amount: amount}));
     dispatch(toggleAddExpenseModal());
   }
 
@@ -70,6 +61,9 @@ const Form = () => {
         label="Amount" 
         variant="outlined"
         error={errors.amount ? true : false}
+        InputProps={{
+          startAdornment: '$'
+        }}
       />
       <TextField 
         {...register("title", {
@@ -101,6 +95,7 @@ const Form = () => {
           required: 'Required',
         })}
         select
+        defaultValue={categories[0].title}
         onChange={(category) => { setValue('category', category, { shouldValidate: true }) }}
         label="Category"
         variant="outlined"

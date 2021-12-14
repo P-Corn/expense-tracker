@@ -1,5 +1,5 @@
-import {useEffect, useState} from 'react';
-import { Modal, TextField, Box, Button, Select, MenuItem } from '@mui/material';
+import { useState} from 'react';
+import { Modal, TextField, Box, Button, MenuItem } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleUpdateExpenseModal } from '../store/interface';
 import { getCategories } from '../store/categories';
@@ -46,7 +46,8 @@ const Form = () => {
   const [displayedDate, setDisplayedDate] = useState(date);
 
   const onSubmit = (data) => {
-    dispatch(updateExpense({...data}));
+    let amount = parseFloat(data.amount).toFixed(2).toString();
+    dispatch(updateExpense({...data, amount: amount}));
     dispatch(toggleUpdateExpenseModal());
   }
 
@@ -109,6 +110,7 @@ const Form = () => {
         select
         onChange={(category) => { setValue('category', category, { shouldValidate: true }) }}
         label="Category"
+        defaultValue={category}
         variant="outlined"
         error={errors.category ? true : false}
       >

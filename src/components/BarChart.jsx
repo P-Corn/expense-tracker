@@ -1,6 +1,6 @@
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { getTotalBudget } from '../store/categories';
 import { getViewWidth } from '../store/interface';
 import { useSelector } from 'react-redux';
@@ -46,10 +46,13 @@ const BarChart = ({ data, totalSpent }) => {
       <Doughnut data={chartData} />
       <Box sx={{ 
         position: 'absolute',
-        left: '50%',
-        mx: 'auto',
         top: '50%',
-      }}>{`Budget: $${totalBudget}`}<br/> {`Spent: $${totalSpent}`}</Box>
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+      }}>
+        <Typography>Spent: <strong>{`$${totalSpent}`}</strong></Typography>
+        <Typography>Budget: <strong>{`$${totalBudget}`}</strong></Typography>
+      </Box>
     </Box>
   )
 }

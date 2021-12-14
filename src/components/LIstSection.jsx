@@ -19,7 +19,7 @@ export default function ListSection({ date, expenses, sortMethod }) {
         }
       >
       {
-        expenses.filter(expense => dayjs(expense.date).format('MMM D YYYY') == dayjs(date).format('MMM D YYYY'))
+        expenses.filter(expense => dayjs(expense.date).format('MMM D YYYY') === dayjs(date).format('MMM D YYYY'))
         .map((expense) => (
           <ListItem key={expense._id} expense={expense}/>
         ))

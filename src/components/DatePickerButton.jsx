@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import { getDateToSummarize, setDateToSummarize } from '../store/interface';
 import dateAdapter from '@mui/lab/AdapterDayjs';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
+import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import dayjs from 'dayjs';
 
 export default function BasicMenu() {
@@ -52,7 +52,7 @@ export default function BasicMenu() {
         }}
       >
         <LocalizationProvider dateAdapter={dateAdapter}>
-          <DatePicker
+          <MobileDatePicker
             views={['month', 'year']}
             minDate={dayjs('2012-03-01')}
             maxDate={dayjs('2023-06-01')}

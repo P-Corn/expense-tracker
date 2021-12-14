@@ -48,7 +48,7 @@ function CategoriesList(props) {
     <Menu
       id='basic-menu'
       anchorEl={anchorEl}
-      open={open._id == category._id ? true : false}
+      open={open._id === category._id ? true : false}
       onClose={handleClose}
       MenuListProps={{
         'aria-labelledby': 'basic-button',

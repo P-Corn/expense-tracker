@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import TextField from '@mui/material/TextField';
@@ -9,7 +9,7 @@ import { setSortMonth } from '../store/expenses';
 import { populateExpensesByMonth } from '../store/expenses';
 import dateAdapter from '@mui/lab/AdapterDayjs';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
+import DatePicker from '@mui/lab/MobileDatePicker';
 import dayjs from 'dayjs';
 
 export default function BasicMenu() {

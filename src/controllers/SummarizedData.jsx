@@ -1,11 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getCategoryTotals } from '../store/categories';
 import BarChart from '../components/BarChart';
 import { Box } from '@mui/system';
 import { useState, useEffect } from 'react';
 
 export default function SummarizedData() {
-  const dispatch = useDispatch();
   const categories = useSelector(getCategoryTotals);
   const [totalSpent, setTotalSpent] = useState(0);
 

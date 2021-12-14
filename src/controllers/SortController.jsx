@@ -1,8 +1,7 @@
 import ListSection from '../components/ListSection';
-import { useSelector, useDispatch } from 'react-redux';
-import { getDates, getDatesByMonth, getExpenses, getExpensesByMonth, loadExpenses } from '../store/expenses';
+import { useSelector } from 'react-redux';
+import { getDates, getDatesByMonth, getExpenses, getExpensesByMonth } from '../store/expenses';
 import { getSortMethod } from '../store/interface';
-import { useEffect } from 'react';
 import dayjs from 'dayjs';
 
 function SortController() {
@@ -11,7 +10,6 @@ function SortController() {
   const sortMethod = useSelector(getSortMethod);
   const expenses = useSelector(getExpenses);
   const expensesByMonth = useSelector(getExpensesByMonth);
-  const dispatch = useDispatch();
 
   const listView = (sortMethod) => {
     if (sortMethod === 'Recent') {

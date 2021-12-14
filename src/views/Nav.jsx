@@ -1,6 +1,5 @@
 /** @jsxRuntime classic /
 /** @jsx jsx */
-import * as React from 'react';
 import { jsx } from '@emotion/react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -29,10 +28,10 @@ export default function Nav() {
           display: 'flex', 
           justifyContent: 'space-between' 
         }}>
-          <Typography variant="h6" component="div">
+          <Typography color="white" variant="h6" component="div">
             Expense Tracker
           </Typography>
-          <Button endIcon={<Add/>} color="inherit" onClick={() => dispatch(toggleAddExpenseModal())}>Add Expense</Button>
+          <Button color="light" endIcon={<Add/>} onClick={() => dispatch(toggleAddExpenseModal())}>Add Expense</Button>
         </Toolbar>
       </AppBar>
     </Box>

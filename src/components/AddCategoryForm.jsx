@@ -25,8 +25,9 @@ const Form = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = async (data) => {
-    dispatch(addCategory(data));
+  const onSubmit = (data) => {
+    let budget = parseFloat(data.budget).toFixed(2).toString();
+    dispatch(addCategory({ ...data, budget: budget }));
     dispatch(toggleAddCategoryModal());
   }
 
@@ -61,6 +62,9 @@ const Form = () => {
             message: 'Too long'
           }
         })}
+        InputProps={{
+          startAdornment: '$'
+        }}
         type="number"
         helperText={ errors.budget ? errors.budget.message : ''}
         label="Budget" 
