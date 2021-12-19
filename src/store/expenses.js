@@ -36,6 +36,7 @@ const slice = createSlice({
 
     expensesReceived: (expenses, action) => {
       expenses.list = action.payload;
+      expenses.loading = false;
     },
 
     datesPopulated: (expenses) => {
@@ -199,4 +200,10 @@ export const getSortMonth =
   createSelector(
     state => state.entities,
     entities => entities.expenses.sortMonth
+  )
+
+export const getLoading =
+  createSelector(
+    state => state.entities,
+    entities => entities.expenses.loading
   )

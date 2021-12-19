@@ -1,15 +1,13 @@
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js'
-import { Box, Typography } from '@mui/material';
-import { getTotalBudget } from '../store/categories';
+import { Box } from '@mui/material';
 import { getViewWidth } from '../store/interface';
 import { useSelector } from 'react-redux';
 Chart.register(ArcElement, Tooltip, Legend);
 
-const BarChart = ({ data, totalSpent }) => {
+const BarChart = ({ data }) => {
 
   const viewWidth = useSelector(getViewWidth);
-  const totalBudget = useSelector(getTotalBudget);
 
   const chartData = {
     labels: Object.keys(data).map(item => item),
@@ -41,18 +39,8 @@ const BarChart = ({ data, totalSpent }) => {
   return (
     <Box sx={{ 
       width: viewWidth < 600 ? '100%' : 500, 
-      position: 'relative',
     }}>
       <Doughnut data={chartData} />
-      <Box sx={{ 
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-      }}>
-        <Typography>Spent: <strong>{`$${totalSpent}`}</strong></Typography>
-        <Typography>Budget: <strong>{`$${totalBudget}`}</strong></Typography>
-      </Box>
     </Box>
   )
 }

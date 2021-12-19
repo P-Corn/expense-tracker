@@ -15,6 +15,7 @@ import UpdateCategoryForm from './components/UpdateCategoryForm';
 import { Box } from '@mui/system';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import green from '@mui/material/colors/green';
+import Backdrop from './components/Backdrop';
 
 const theme = createTheme({
   palette: {
@@ -41,6 +42,7 @@ function App() {
             <UpdateExpenseForm />
             <AddCategoryForm />
             <UpdateCategoryForm />
+            <Backdrop />
             <Box sx={{ height: `${window.innerHeight - 170}px` }}>
               <Switch>
                 <Route exact path="/">
