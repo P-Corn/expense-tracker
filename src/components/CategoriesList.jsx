@@ -5,10 +5,13 @@ import { getCategories, editCategory, deleteCategory } from '../store/categories
 import { toggleAddCategoryModal } from '../store/interface';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import DeleteDialog from '../components/DeleteDialog';
 
-function CategoriesList(props) {
+function CategoriesList() {
   const dispatch = useDispatch();
   const categories = useSelector(getCategories);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   const [totalBudget, setTotalBudget] = useState(0);
   useEffect(() => {
@@ -26,22 +29,31 @@ function CategoriesList(props) {
     setAnchorEl(event.currentTarget);
     setOpen({...category});
   };
+
   const handleClose = () => {
     setAnchorEl(null);
     setOpen('');
   };
 
    // HANDLERS
+  const handleDialog = (id) => {
+    setCategoryToDelete(id);
+    setDialogOpen(true);
+    handleClose();
+  }
+
   const handleEdit = category => {
     dispatch(editCategory(category));
     handleClose();
   };
+
   const handleDelete = category => {
     if (categories.length < 2)
       return;
     dispatch(deleteCategory(category));
-    handleClose();
+    setDialogOpen(false);
   }
+
   const handleAddCategory = () => dispatch(toggleAddCategoryModal());
 
   const CategoryMenu = ({ category }) => (
@@ -56,12 +68,18 @@ function CategoriesList(props) {
     >
       <MenuItem onClick={(e) => handleEdit(category)}>Edit</MenuItem>
       <Divider />
-      <MenuItem onClick={() => handleDelete(category)}>Delete</MenuItem>
+      <MenuItem onClick={() => handleDialog(category)}>Delete</MenuItem>
     </Menu>
   )
 
   return (
     <div>
+      <DeleteDialog
+        open={dialogOpen}
+        handleDelete={handleDelete}
+        id={categoryToDelete}
+        setDialogOpen={setDialogOpen}
+      />
       <List
         subheader={
           <ListSubheader component="div" id="nested-list-subheader">
