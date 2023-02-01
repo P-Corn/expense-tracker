@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, IconButton, Button, Box, Menu, MenuItem, Divider, ListSubheader } from '@mui/material';
+import { List, ListItem, ListItemText, IconButton, Button, Box, Menu, MenuItem, Divider, ListSubheader, Snackbar } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddIcon from '@mui/icons-material/Add';
 import { getCategories, editCategory, deleteCategory } from '../store/categories';
@@ -12,6 +12,7 @@ function CategoriesList() {
   const categories = useSelector(getCategories);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const [totalBudget, setTotalBudget] = useState(0);
   useEffect(() => {
@@ -48,8 +49,10 @@ function CategoriesList() {
   };
 
   const handleDelete = category => {
-    if (categories.length < 2)
+    if (categories.length < 2) {
+      setOpenSnackbar(true);
       return;
+    }
     dispatch(deleteCategory(category));
     setDialogOpen(false);
   }
@@ -79,6 +82,12 @@ function CategoriesList() {
         handleDelete={handleDelete}
         id={categoryToDelete}
         setDialogOpen={setDialogOpen}
+      />
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        message="There must be at least one category."
       />
       <List
         subheader={

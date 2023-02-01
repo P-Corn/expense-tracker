@@ -27,14 +27,15 @@ const btnGroup = {
 }
 
 const Form = () => {
-  const [date, setDate] = useState(dayjs());
+  const [date, setDate] = useState(dayjs().format('MMMM D YYYY'));
   const dispatch = useDispatch();
   const categories = useSelector(getCategories);
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
   const onSubmit = (data) => {
+
     let amount = parseFloat(data.amount).toFixed(2).toString();
-    dispatch(addExpense({...data, amount: amount}));
+    dispatch(addExpense({...data, amount: amount, date: dayjs(date).add(1, 'day').format('MMMM D YYYY')}));
     dispatch(toggleAddExpenseModal());
   }
 
@@ -116,6 +117,7 @@ const Form = () => {
           {...register("date")}
           onChange={(newDate) => {
             const formattedDate = dayjs(newDate).format('MMMM D YYYY');
+            console.log(formattedDate)
             setDate(formattedDate);
             setValue('date', formattedDate, { shouldValidate: true });
           }}
